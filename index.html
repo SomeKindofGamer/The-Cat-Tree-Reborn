@@ -62,6 +62,8 @@
             <br><br>
         </div>
 
+        <div id="cat-container"></div>
+
         <div id="treeOverlay" v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" class="treeOverlay" onscroll="resizeCanvas()" v-bind:class="{ 
 			fullWidth: (player.tab == 'none' || player.navTab == 'none'), 
 			col: (player.tab !== 'none' && player.navTab !== 'none'), 
