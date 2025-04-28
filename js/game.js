@@ -27,9 +27,9 @@ function getResetGain(layer, useType = null) {
         let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).times(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1))
         gain = gain.times(tmp[layer].directMult)
 
-        
 
-        return 
+
+        return
     } else if (type == "garden") {
         if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne
         let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).times(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1))
@@ -216,8 +216,6 @@ function layerDataReset(layer, keep = []) {
         player[layer][thing] = storedData[thing]
     }
 }
-
-
 
 function addPoints(layer, gain) {
     player[layer].points = player[layer].points.add(gain).max(0)

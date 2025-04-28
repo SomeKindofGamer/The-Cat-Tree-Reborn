@@ -1,7 +1,7 @@
 var systemComponents = {
-	'tab-buttons': {
-		props: ['layer', 'data', 'name'],
-		template: `
+    'tab-buttons': {
+        props: ['layer', 'data', 'name'],
+        template: `
 			<div class="upgRow">
 				<div v-for="tab in Object.keys(data)">
 					<button v-if="data[tab].unlocked == undefined || data[tab].unlocked" v-bind:class="{tabButton: true, notify: subtabShouldNotify(layer, name, tab), resetNotify: subtabResetNotify(layer, name, tab)}"
@@ -10,11 +10,11 @@ var systemComponents = {
 				</div>
 			</div>
 		`
-	},
+    },
 
-	'tree-node': {
-		props: ['layer', 'abb', 'size', 'prev'],
-		template: `
+    'tree-node': {
+        props: ['layer', 'abb', 'size', 'prev'],
+        template: `
 		<button v-if="nodeShown(layer)"
 			v-bind:id="layer"
 			v-on:click="function() {
@@ -61,12 +61,12 @@ var systemComponents = {
 			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
 		</button>
 		`
-	},
+    },
 
-	
-	'layer-tab': {
-		props: ['layer', 'back', 'spacing', 'embedded'],
-		template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]" class="noBackground">
+
+    'layer-tab': {
+        props: ['layer', 'back', 'spacing', 'embedded'],
+        template: `<div v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]" class="noBackground">
 		<div v-if="back"><button v-bind:class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack(layer)">←</button></div>
 		<div v-if="!tmp[layer].tabFormat">
 			<div v-if="spacing" v-bind:style="{'height': spacing}" :key="this.$vnode.key + '-spacing'"></div>
@@ -100,10 +100,10 @@ var systemComponents = {
 			</div>
 		</div></div>
 			`
-	},
+    },
 
-	'overlay-head': {
-		template: `			
+    'overlay-head': {
+        template: `			
 		<div class="overlayThing" style="padding-bottom:7px; width: 90%; z-index: 1000; position: relative">
 		<span v-if="player.devSpeed && player.devSpeed != 1" class="overlayThing">
 			<br>Dev Speed: {{format(player.devSpeed)}}x<br>
@@ -136,15 +136,15 @@ var systemComponents = {
         The Modding Tree <a v-bind:href="'https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >{{TMT_VERSION.tmtNum}}</a> by Acamaeda
         <br>
         The Prestige Tree made by Jacorb and Aarex
+		<br>
+		<a v-bind:href="'https://www.youtube.com/watch?v=NNltaBIk5rs'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >cat cafe</a> by <a v-bind:href="'https://www.youtube.com/@kosumusic'" target="_blank" class="link" v-bind:style = "{'font-size': '14px', 'display': 'inline'}" >kosu</a>
 		<br><br>
 		<div class="link" onclick="showTab('changelog-tab')">Changelog</div><br>
         <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
         <a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br>
         <a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 		<br><br>
-        Time Played: {{ formatTime(player.timePlayed) }}<br><br>
-        <h3>Hotkeys</h3><br>
-        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><br>{{key.description}}</span></div>
+        You've spent {{ formatTimeAlt(player.timePlayed) }} grinding cats<br><br>
     `
     },
 
@@ -152,6 +152,7 @@ var systemComponents = {
         template: `
         <table>
             <tr>
+			    <td><button class="opt" onclick="changeMusic(); needsCanvasUpdate = true">Music: {{ player.music?"ON":"OFF" }}</button></td>
                 <td><button class="opt" onclick="save()">Save</button></td>
                 <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{ options.autosave?"ON":"OFF" }}</button></td>
                 <td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
@@ -162,6 +163,7 @@ var systemComponents = {
             </tr>
             <tr>
                 <td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{ MS_DISPLAYS[MS_SETTINGS.indexOf(options.msDisplay)]}}</button></td>
+				<td><button class="opt" onclick="changeNotation()">Notation: {{ notations[notations.indexOf(player.notation)]}}</button></td>
                 <td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{ options.hqTree?"ON":"OFF" }}</button></td>
             </tr>
             <tr>
@@ -178,24 +180,24 @@ var systemComponents = {
     },
 
 
-	'tooltip' : {
-		props: ['text'],
-		template: `<div class="tooltip" v-html="text"></div>
+    'tooltip': {
+        props: ['text'],
+        template: `<div class="tooltip" v-html="text"></div>
 		`
-	},
+    },
 
-	'node-mark': {
-		props: {'layer': {}, data: {}, offset: {default: 0}, scale: {default: 1}},
-		template: `<div v-if='data'>
+    'node-mark': {
+        props: { 'layer': {}, data: {}, offset: { default: 0 }, scale: { default: 1 } },
+        template: `<div v-if='data'>
 			<div v-if='data === true' class='star' v-bind:style='{position: "absolute", left: (offset-10) + "px", top: (offset-10) + "px", transform: "scale( " + scale||1 + ", " + scale||1 + ")"}'></div>
 			<img v-else class='mark' v-bind:style='{position: "absolute", left: (offset-22) + "px", top: (offset-15) + "px", transform: "scale( " + scale||1 + ", " + scale||1 + ")"}' v-bind:src="data"></div>
 		</div>
 		`
-	},
+    },
 
-	'particle': {
-		props: ['data', 'index'],
-		template: `<div><div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" 
+    'particle': {
+        props: ['data', 'index'],
+        template: `<div><div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" 
 			v-on:click="run(data.onClick, data)"  v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)" ><span v-html="data.text"></span>
 		</div>
 		<svg version="2" v-if="data.color">
@@ -205,13 +207,12 @@ var systemComponents = {
     	</svg>
 		</div>
 		`
-	},
+    },
 
-	'bg': {
-		props: ['layer'],
-		template: `<div class ="bg" v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]"></div>
+    'bg': {
+        props: ['layer'],
+        template: `<div class ="bg" v-bind:style="[tmp[layer].style ? tmp[layer].style : {}, (tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ? tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style : {}]"></div>
 		`
-	}
+    }
 
 }
-

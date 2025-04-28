@@ -276,12 +276,9 @@ function loadVue() {
                     'resources/cats/cat6.png',
                     'resources/cats/cat7.png'
                 ];
+                const catAmount = player.cats.points
 
-                const meow = new Audio('resources/sounds/meow.ogg');
-                meow.volume = 1;
-                meow.play();
-
-                const catCount = Math.floor(Math.random() * 3) + 1;
+                const catCount = Math.floor(Math.random() * catAmount) + 1;
 
                 for (let i = 0; i < catCount; i++) {
                     const cat = document.createElement('img');
@@ -297,6 +294,21 @@ function loadVue() {
                     cat.style.pointerEvents = 'none';
                     container.appendChild(cat);
 
+                    const meowSounds = [
+                        'resources/sounds/meow.mp3',
+                        'resources/sounds/meow2.mp3',
+                        'resources/sounds/meow3.mp3'
+                    ];
+
+                    const randomMeow = new Audio(meowSounds[Math.floor(Math.random() * meowSounds.length)]);
+                    randomMeow.volume = 1;
+
+                    randomMeow.addEventListener('canplaythrough', () => {
+                        setTimeout(() => {
+                            randomMeow.play();
+                        }, i * 75);
+                    }, { once: true });
+
                     setTimeout(() => {
                         cat.style.bottom = (70 + Math.random() * 20) + 'vh';
                         cat.style.transform = `rotate(${Math.random() * 360}deg) scale(1.2)`;
@@ -307,6 +319,7 @@ function loadVue() {
                         container.removeChild(cat);
                     }, 2500);
                 }
+
             }
         }
     });
@@ -772,6 +785,7 @@ function loadVue() {
             format,
             formatWhole,
             formatTime,
+            formatTimeAlt,
             formatSmall,
             focused,
             getThemeName,
