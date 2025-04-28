@@ -10,6 +10,7 @@ addLayer("cats", {
         }
     },
     color: "#ffd36e",
+    glowColor: "orange",
     requires: new Decimal(25), // Can be a function that takes requirement increases into account
     resource: "cats", // Name of prestige currency
     baseResource: "monies", // Name of resource prestige is based on
@@ -44,7 +45,7 @@ addLayer("cats", {
         }
 
         if (player.cats.points.gte(19)) {
-            let multer = new Decimal(0.94)
+            let multer = new Decimal(0.92)
             
             Generation = Generation.times(multer)
         }
@@ -106,7 +107,7 @@ addLayer("cats", {
 
         3: {
             requirementDescription: "Almost millonaire (7)",
-            effectDescription: "Unlock 2 new cat food upgrades and 2x more monies",
+            effectDescription: "Unlock 2 new cat food upgrades",
             done() {
                 return player.cats.points.gte(7)
             },
@@ -123,10 +124,10 @@ addLayer("cats", {
         },
 
         5: {
-            requirementDescription: "The god of cats. (19)",
+            requirementDescription: "The god of cats. (20)",
             effectDescription: "x3 monies and beat the game. till next update ;)",
             done() {
-                return player.cats.points.gte(19)
+                return player.cats.points.gte(20)
             },
             unlocked() { return hasUpgrade("catfood", 25) },
         },
@@ -247,7 +248,7 @@ addLayer("cats", {
             },
 
             effectDisplay() { return "your cats robbing banks are boosting your monies by: " + format(upgradeEffect(this.layer, this.id)) + "x" },
-            unlocked() { return (hasUpgrade('cats', 22) && hasUpgrade('catfood', 24) || hasUpgrade('cats', 23)) },
+            unlocked() { return (hasUpgrade('cats', 22) && hasUpgrade('catfood', 25) || hasUpgrade('cats', 23)) },
         },
 
         24: {
@@ -277,7 +278,7 @@ addLayer("cats", {
         //  {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown() { return true },
-
+    
     tabFormat: {
         "Cats": {
             content: ["main-display",
@@ -314,6 +315,7 @@ addLayer("catfood", {
     },
     branches: ["cats"],
     color: "#ff7575",
+    glowColor: "red",
     requires: new Decimal(5), // Can be a function that takes requirement increases into account
     resource: "cat food", // Name of prestige currency
     baseResource: "cats", // Name of resource prestige is based on
@@ -389,12 +391,9 @@ addLayer("catfood", {
             effect() {
                 let pow = new Decimal(1.66)
 
-                if (hasUpgrade('catfood', 21)) {
-                    pow = new Decimal(2)
-                }
+                if (hasUpgrade('catfood', 21)) pow = new Decimal(2)
 
-                let mult = player[this.layer].points.add(1)
-                mult.pow(pow)
+                let mult = player[this.layer].points.add(1).pow(pow)
                 
                 if (hasUpgrade('catfood', 23)) mult = mult.times(upgradeEffect('catfood', 23))
 

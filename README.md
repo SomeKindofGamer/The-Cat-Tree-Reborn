@@ -1,10 +1,7 @@
-# The Cat Tree Reborn Version 1.0
-An incremental game based off [The Modding Tree](https://github.com/Acamaeda/The-Modding-Tree) which is an incremental game engine based on [The Prestige Tree](https://jacorb90.me/Prestige-Tree/)
+# The-Modding-Tree
 
-This mod is based on cats and is a remaster of an old tree game I made almost a year ago, [The Cat Tree!](https://galaxy.click/play/384)
+An incremental game engine based on The Prestige Tree. It still requires programming knowledge, but it's mostly pretty easy things and copy/pasting.
 
-Basically in this mod you gain monies every second, buy cats with monies to get milestones and upgrades (thats it for now lol)
+[Look here for a tutorial on getting started with modding with TMT](docs/tutorials/getting-started.md)
 
-Currently this mod has 2 layers, 9 achievements, 6 milestones and 19 upgrades.
-
-This mod was created by Shoober.
+You can look in the [documentation](docs/!general-info.md) for more information on how it all works, or look at the code in layers.js to see what it all looks like.

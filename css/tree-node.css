@@ -3,9 +3,9 @@
 	height: 80px;
 	width: 100px;
 	border: var(--hqProperty1);
-	border: 3px solid;
+	border: 4px solid;
 	border-color: rgba(0, 0, 0, 0.2);
-	border-radius: 10%;
+	border-radius: 7%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
 	font-family: "fonts/cabin.ttf", monospace;
@@ -68,10 +68,8 @@
 .notify {
 	transform: scale(1.05, 1.05);
 	border-color: rgba(0, 0, 0, 0.125);
-	box-shadow: var(--hqProperty2a), 0 0 20px #ff0000;
+	box-shadow: var(--hqProperty2a), 0 0 20px #59ffa1;
 }
-
-
 
 .mark {
 	position: relative;

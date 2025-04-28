@@ -20,6 +20,10 @@ let VERSION = {
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.0</h3><br>
 		- cats! ofc!<br>
+        - 2 Layers<br>
+        - 9 Achievements<br>
+        - 6 milestones<br>
+        - 19 upgrades<br>
 		`
 
 let winText = `Congratulations! You've reached cat 20 and beat the game till next update!, but for now...`
