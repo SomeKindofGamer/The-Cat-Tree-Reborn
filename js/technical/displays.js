@@ -35,8 +35,6 @@ function achievementStyle(layer, id){
     return style
 }
 
-
-
 function updateWidth() {
 	let screenWidth = window.innerWidth
 	let splitScreen = screenWidth >= 1024

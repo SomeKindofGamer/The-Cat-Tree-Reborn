@@ -78,8 +78,6 @@ function isEndgame() {
     return player.cats.points.gte(20)
 }
 
-
-
 // Less important things beyond this point!
 
 // Style for the background, can be a function

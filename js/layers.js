@@ -40,19 +40,19 @@ addLayer("cats", {
 
         if (player.cats.points.gte(17)) {
             let multer = new Decimal(0.96)
-            
+
             Generation = Generation.times(multer)
         }
 
         if (player.cats.points.gte(19)) {
             let multer = new Decimal(0.92)
-            
+
             Generation = Generation.times(multer)
         }
 
         if (player.cats.points.gte(20)) {
             let multer = new Decimal(0.5)
-            
+
             Generation = Generation.times(multer)
         }
 
@@ -63,21 +63,21 @@ addLayer("cats", {
         if (resettingLayer === 'catfood') {
             let savedMilestones = player.cats.milestones;
             let upgradesToKeep = [];
-    
+
             if (hasMilestone('cats', 4)) {
                 upgradesToKeep = player.cats.upgrades.slice();
             } else {
                 if (hasUpgrade('cats', 21)) upgradesToKeep.push(21);
                 if (hasUpgrade('cats', 22)) upgradesToKeep.push(22);
             }
-    
+
             layerDataReset(this.layer);
-    
+
             player.cats.upgrades = upgradesToKeep;
             player.cats.milestones = savedMilestones;
         }
     },
-    
+
     milestones: {
         0: {
             requirementDescription: "your first fluffy friend! (1)",
@@ -157,6 +157,24 @@ addLayer("cats", {
                 return mult.pow(pow)
             },
 
+            tooltip() {
+                let pow = new Decimal(0.66)
+                if (hasUpgrade('cats', 13)) {
+                    pow = new Decimal(0.88)
+                }
+
+                let formula = "cats"
+
+                formula += `^${pow.toFixed(2)}`
+
+                if (hasUpgrade('cats', 14)) {
+                    let effect = upgradeEffect('cats', 14)
+                    formula += `×${effect.toFixed(2)}`
+                }
+
+                return "formula " + formula
+            },
+
             effectDisplay() { return "adsense is making you: " + format(upgradeEffect(this.layer, this.id)) + "x more monies" }, // Add formatting to the effect
             unlocked() { return (hasUpgrade('cats', 11)) },
         },
@@ -177,6 +195,10 @@ addLayer("cats", {
                 let pow = new Decimal(0.333)
 
                 return player[this.layer].points.add(1).pow(pow)
+            },
+
+            tooltip() {
+                return "formula cats^0.333"
             },
 
             effectDisplay() { return "cats are boosting adsense by: " + format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
@@ -202,7 +224,16 @@ addLayer("cats", {
                 }
             },
 
-            effectDisplay() { return "grandmas monies machine is making you: " +  format(upgradeEffect(this.layer, this.id)) + "x more monies" }, // Add formatting to the effect
+            tooltip() {
+                let pow = new Decimal(215)
+                if (hasUpgrade('catfood', 14)) {
+                    pow = new Decimal(35)
+                }
+
+                return "formula log_base(" + pow + ") of monies"
+            },
+
+            effectDisplay() { return "grandmas monies machine is making you: " + format(upgradeEffect(this.layer, this.id)) + "x more monies" }, // Add formatting to the effect
             unlocked() { return (hasUpgrade('cats', 14)) },
         },
 
@@ -213,18 +244,18 @@ addLayer("cats", {
 
             effect() {
                 if (player.points.gte(10)) {
-                    let catpower = new Decimal(0.006) 
+                    let catpower = new Decimal(0.006)
                     if (hasUpgrade('catfood', 24)) {
                         catpower = new Decimal(0.012)
                     }
 
-                        return player.points.add(1).pow(catpower)
+                    return player.points.add(1).pow(catpower)
                 } else {
                     return 1
                 }
             },
-            
-            tooltip() {return "basically means ^" + format(upgradeEffect(this.layer, this.id)) + " monies sorry if ur confused by cat power i thought cat power was cool sounding"},
+
+            tooltip() { return "basically means ^" + format(upgradeEffect(this.layer, this.id)) + " monies sorry if ur confused by cat power i thought cat power was cool sounding" },
             effectDisplay() { return "cat cat cat? " + format(upgradeEffect(this.layer, this.id)) + " cat power" },
             unlocked() { return (hasUpgrade('cats', 15) && hasUpgrade('catfood', 22) || hasUpgrade('cats', 21)) },
         },
@@ -240,7 +271,7 @@ addLayer("cats", {
             title: "cat thieves",
             description: "train your cats to rob banks for you",
             cost: new Decimal(10),
-            
+
             effect() {
                 let pow = new Decimal(0.65)
 
@@ -278,7 +309,7 @@ addLayer("cats", {
         //  {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown() { return true },
-    
+
     tabFormat: {
         "Cats": {
             content: ["main-display",
@@ -332,19 +363,19 @@ addLayer("catfood", {
     gainExp() { // Calculate the exponent on main currency from bonuses
         let Generation = new Decimal(3.803)
         if (player[this.layer].points.gte(2)) {
-            Generation = new Decimal(4.1205)   
-        }
-        
-        if (player[this.layer].points.gte(3)) {
-            Generation = new Decimal(4.4245)   
+            Generation = new Decimal(4.1205)
         }
 
         if (player[this.layer].points.gte(3)) {
-            Generation = new Decimal(4.8)   
+            Generation = new Decimal(4.4245)
+        }
+
+        if (player[this.layer].points.gte(3)) {
+            Generation = new Decimal(4.8)
         }
 
         if (player[this.layer].points.gte(5)) {
-            Generation = new Decimal(5)   
+            Generation = new Decimal(5)
         }
 
         return Generation
@@ -394,11 +425,26 @@ addLayer("catfood", {
                 if (hasUpgrade('catfood', 21)) pow = new Decimal(2)
 
                 let mult = player[this.layer].points.add(1).pow(pow)
-                
+
                 if (hasUpgrade('catfood', 23)) mult = mult.times(upgradeEffect('catfood', 23))
 
                 return mult
             },
+
+            tooltip() {
+                let pow = new Decimal(1.66)
+                if (hasUpgrade('catfood', 21)) {
+                    pow = new Decimal(2)
+                }
+
+                if (hasUpgrade('catfood', 23)) {
+                    let effect = upgradeEffect('catfood', 23)
+                    pow = pow + "x" + effect.toFixed(2)
+                }
+
+                return "formula catfood^" + pow
+            },
+
 
             effectDisplay() { return "cat food is multiplying by: " + format(upgradeEffect(this.layer, this.id)) + "x more monies" }, // Add formatting to the effect
             unlocked() { return (hasUpgrade('catfood', 12)) },
@@ -438,20 +484,20 @@ addLayer("catfood", {
 
             effectDisplay() { return "ultimate feeder boost: " + format(upgradeEffect(this.layer, this.id)) + "x" },
         },
-        
+
         24: {
             title: "kitty empire",
             description: "2x cat food gain",
             cost: new Decimal(6),
             unlocked() { return (hasUpgrade('catfood', 23) && hasMilestone('cats', 4)) },
         },
-        
+
         25: {
             title: "feline fortune",
             description: "unlock even more cat upgrades",
             cost: new Decimal(8),
             unlocked() { return (hasUpgrade('catfood', 24) && hasMilestone('cats', 4)) },
-        },        
+        },
     },
 
     tabFormat: {
@@ -564,7 +610,7 @@ addLayer("a", {
             ["achievement", 23],
             ["achievement", 24],
         ]],
-        
+
         "blank",
         "blank",
     ],

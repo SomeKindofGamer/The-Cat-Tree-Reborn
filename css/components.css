@@ -8,6 +8,55 @@
 	font-family: "fonts/cabin.ttf", monospace;
 }
 
+.upgNum {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    font-weight: bold;
+    color: black;
+    opacity: 0.35;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.resource-watermark {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.layer-watermark {
+    position: fixed;
+    bottom: 8vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 9999;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+    font-family: Inconsolata, monospace;
+    transition: left 0.3s ease;
+}
+
+.layer-watermark.split-screen {
+    left: 75%;
+}
+
 .achievement {
 	height: 70px;
 	width: 90px;
