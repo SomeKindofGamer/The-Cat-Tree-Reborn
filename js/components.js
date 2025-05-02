@@ -103,7 +103,6 @@ function loadVue() {
 		`
     })
 
-
     // Data = width in px, by default fills the full area
     Vue.component('h-line', {
         props: ['layer', 'data'],
@@ -233,11 +232,6 @@ function loadVue() {
 			</td>
 		`,
     });
-
-
-
-
-
 
     Vue.component('toggle', {
         props: ['layer', 'data'],
@@ -677,7 +671,6 @@ function loadVue() {
 			</span>
 			<tr><table><button class="treeMeow hidden"></button></table></tr>
 		</span></div>
-
 	`
     })
 

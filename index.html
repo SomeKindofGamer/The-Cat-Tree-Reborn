@@ -37,8 +37,26 @@
 
 </head>
 
+<!-- Welcome Overlay -->
+<div id="welcomeOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 3232412; overflow: hidden; font-family: Inconsolata; text-align: center; background: rgba(20, 20, 20, 1); display: flex; justify-content: center; align-items: center;">
+    <!-- Welcome text -->
+    <div style="max-width: 800px; padding: 40px; border-radius: 15px; color: white;">
+        <h2 style="font-size: 36px;">Welcome to The Cat Tree Reborn!</h2>
+        <p style="font-size: 20px; margin-top: 20px; line-height: 1.6;">
+            This game was created by Shoober as a remaster to the original Cat Tree Reborn
+            <br> for its 1 year anniversary.
+            <br><br> Rebalanced a lot of the gameplay, a lot less gameplay locking and more cats!
+            <br> Unfortunately this game has less content at the moment than the original Cat Tree,
+            <br> but more content will be added in the future!
+            <br><br> Thank you for playing and enjoy this TMT mod!
+        </p>
+        <br>
+        <button class="longUpg can" onclick="hideWelcome()">Let's play!</button>
+    </div>
+</div>
 
-<body onload="load()" onmousemove="updateMouse(event)">
+
+<body onmousemove="updateMouse(event)">
     <div id="app">
         <canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 
@@ -53,7 +71,8 @@
             <h3>Please check the Discord to see if there are new content updates!</h3><br><br>
             <div v-if="!player.timePlayedReset">It took you {{formatTimeAlt(player.timePlayed)}} to beat the game.</div>
             <br>
-            <button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;<button class="longUpg can" onclick="keepGoing()">Keep Going</button>
+            <button class="longUpg can" onclick="hardReset(true)">Play Again</button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="longUpg can" onclick="keepGoing()">Keep Going</button>
             <br><br><br>
             <span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink"
 					target="_blank">{{modInfo.discordName}}</a><br></span>
@@ -67,8 +86,6 @@
         <div v-if="player.tab !== 'none'" class="layer-watermark" :class="{ 'split-screen': tmp.other.splitScreen }">
             {{ tmp[player.tab]?.name || player.tab }}
         </div>
-
-
 
         <div id="treeOverlay" v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" class="treeOverlay" onscroll="resizeCanvas()" v-bind:class="{ 
 			fullWidth: (player.tab == 'none' || player.navTab == 'none'), 
@@ -129,6 +146,11 @@
 
         </div>
         <div class="bg2" v-bind:style="tmp.backgroundStyle"></div>
-
-    </div>
 </body>
+
+<script>
+    function hideWelcome() {
+        document.getElementById('welcomeOverlay').style.display = 'none '
+        load()
+    }
+</script>
