@@ -23,6 +23,18 @@ addLayer("cats", {
         return mult
     },
 
+    resourceDescription() {
+        return "You've adopted "
+    },
+
+    autoPrestige() {
+        if (hasUpgrade('catfood', 32)) {
+            return true
+        } else {
+            return false
+        }
+    },
+
     gainExp() { // Calculate the exponent on main currency from bonuses
         let Generation = new Decimal(1)
         if (player.cats.points.gte(5)) {
@@ -51,11 +63,29 @@ addLayer("cats", {
         }
 
         if (player.cats.points.gte(20)) {
-            let multer = new Decimal(0.5)
+            let multer = new Decimal(0.64)
 
             Generation = Generation.times(multer)
         }
 
+        if (player.cats.points.gte(21)) {
+            let multer = new Decimal(0.82)
+
+            Generation = Generation.times(multer)
+        }
+
+        if (player.cats.points.gte(25)) {
+            let multer = new Decimal(0.92)
+
+            Generation = Generation.times(multer)
+        }
+
+        if (player.cats.points.gte(29)) {
+            let multer = new Decimal(0.88)
+
+            Generation = Generation.times(multer)
+        }
+        
         return Generation
     },
 
@@ -69,6 +99,20 @@ addLayer("cats", {
             } else {
                 if (hasUpgrade('cats', 21)) upgradesToKeep.push(21);
                 if (hasUpgrade('cats', 22)) upgradesToKeep.push(22);
+            }
+
+            layerDataReset(this.layer);
+
+            player.cats.upgrades = upgradesToKeep;
+            player.cats.milestones = savedMilestones;
+        }
+
+        if (resettingLayer === 'garden') {
+            let savedMilestones = player.cats.milestones;
+            let upgradesToKeep = [];
+
+            if (hasUpgrade('garden', 13)) {
+                upgradesToKeep = player.cats.upgrades.slice();
             }
 
             layerDataReset(this.layer);
@@ -124,8 +168,8 @@ addLayer("cats", {
         },
 
         5: {
-            requirementDescription: "The god of cats. (20)",
-            effectDescription: "x3 monies and beat the game. till next update ;)",
+            requirementDescription: "Ready to plant? (20)",
+            effectDescription: "x3 monies and unlock The Garden",
             done() {
                 return player.cats.points.gte(20)
             },
@@ -193,12 +237,24 @@ addLayer("cats", {
 
             effect() {
                 let pow = new Decimal(0.333)
+                let mul = player[this.layer].points.add(1).pow(pow)
 
-                return player[this.layer].points.add(1).pow(pow)
+                if (hasUpgrade("garden", 11)) {
+                    mul = mul.times(upgradeEffect('garden', 11))
+                }
+
+                return mul
             },
 
             tooltip() {
-                return "formula cats^0.333"
+                let form = "formula cats^0.333"
+
+                if (hasUpgrade('garden', 11)) {
+                    let effect = upgradeEffect('garden', 11)
+                    form += `×${effect.toFixed(2)}`
+                }
+
+                return form
             },
 
             effectDisplay() { return "cats are boosting adsense by: " + format(upgradeEffect(this.layer, this.id)) + "x" }, // Add formatting to the effect
@@ -302,6 +358,52 @@ addLayer("cats", {
             effectDisplay() { return "your cats robbing banks are boosting your monies by: " + format(upgradeEffect(this.layer, this.id)) + "x" },
             unlocked() { return (hasUpgrade('cats', 24)) },
         },
+
+        31: {
+            title: "Planning for WORLD DOMINATION",
+            description: "Your cats multiply your monies gain by alot",
+
+            effect() {
+                let pow = new Decimal(1.5)
+
+                return player[this.layer].points.add(1).pow(pow)
+            },
+
+            effectDisplay() { return "your cats are boosting your monies by: " + format(upgradeEffect(this.layer, this.id)) + "x" },
+            cost: new Decimal(20),
+            unlocked() { return (hasUpgrade('cats', 25) && hasMilestone('garden', 3)) },
+        },
+
+        32: {
+            title: "Send cats to the garden to meditate",
+            description: "Your monies will multiply by cats multiplied by flowers.",
+
+            effect() {
+                let pow = new Decimal(1)
+                let pow2 = new Decimal(0.2)
+
+                return player[this.layer].points.add(1).pow(pow).times(player.garden.points.add(1).pow(pow2))
+            },
+
+            effectDisplay() { return "your cats are boosting your monies by: " + format(upgradeEffect(this.layer, this.id)) + "x" },
+            cost: new Decimal(21),
+            unlocked() { return (hasUpgrade('cats', 31)) },
+        },
+
+        33: {
+            title: "World Domination.",
+            description: "Finally. WORLD DOMINATION.",
+
+            effect() {
+                let pow = new Decimal(0.077)
+
+                return player.points.add(1).pow(pow)
+            },
+
+            effectDisplay() { return "world domination is boosting your monies by: " + format(upgradeEffect(this.layer, this.id)) + "x" },
+            cost: new Decimal(22),
+            unlocked() { return (hasUpgrade('cats', 31)) },
+        },
     },
 
     row: 0, // Row the layer is in on the tree (0 is the first row)
@@ -323,6 +425,7 @@ addLayer("cats", {
         "Upgrades": {
             content: ["main-display",
                 "resource-display",
+                "prestige-button",
                 "blank",
                 "upgrades",
             ],

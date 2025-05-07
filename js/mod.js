@@ -6,6 +6,7 @@ let modInfo = {
     modFiles: [
         "layers/cats.js",
         "layers/catfood.js",
+        "layers/garden.js",
         "layers/a.js",
         "tree.js",
     ],
@@ -18,11 +19,18 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-    num: "1.0.1",
+    num: "1.1",
     name: "Cat Tree Reborn",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+    <h3>v1.1</h3><br>
+		- 1 new layer!<br>
+        - 11 new upgrades!<br>
+        - 6 new milestones!<br>
+        - 4 new achievements!<br>
+        <br>
+        
 	<h3>v1.0.1</h3><br>
 		- Added SFX option<br>
         - Added Hotkeys<br>
@@ -36,7 +44,7 @@ let changelog = `<h1>Changelog:</h1><br>
         - 19 upgrades<br>
 		`
 
-let winText = `Congratulations! You've reached cat 20 and beat the game till next update!, but for now...`
+let winText = `Congratulations! You've reached 3,000 Flowers and beat the game till next update!, but for now...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -66,11 +74,18 @@ function getPointGen() {
     if (hasUpgrade('cats', 23)) gain = gain.times(upgradeEffect('cats', 23))
     if (hasUpgrade('cats', 25)) gain = gain.times(upgradeEffect('cats', 25))
     if (hasMilestone('cats', 5)) gain = gain.times(3)
+    if (hasUpgrade('cats', 31)) gain = gain.times(upgradeEffect('cats', 31))
+    if (hasUpgrade('cats', 32)) gain = gain.times(upgradeEffect('cats', 32))
+    if (hasUpgrade('cats', 33)) gain = gain.times(upgradeEffect('cats', 33))
     
     // Cat Food Layer
     if (hasUpgrade('catfood', 11)) gain = gain.times(2)
     if (hasUpgrade('catfood', 12)) gain = gain.times(3)
     if (hasUpgrade('catfood', 13)) gain = gain.times(upgradeEffect('catfood', 13))
+    
+    // Garden Layer
+    gain = gain.times(layers.garden.effect())
+    if (hasMilestone('garden', 4)) gain = gain.times(10)
 
     return gain
 }
@@ -85,7 +100,7 @@ var displayThings = []
 
 // Determines when the game "ends"
 function isEndgame() {
-    return player.cats.points.gte(20)
+    return player.garden.points.gte(3000)
 }
 
 // Less important things beyond this point!

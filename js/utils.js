@@ -31,8 +31,18 @@ function canBuyBuyable(layer, id) {
 
 function prestigeButtonText(layer) {
     if (tmp[layer].type == "normal") {
+		let gains = tmp[layer].resetGain
+
+		if (hasUpgrade("garden", 12) && tmp[layer].resource == "flowers") {
+			gains = gains.mul(2)
+		}
+
+		if (hasUpgrade("catfood", 34) && tmp[layer].resource == "flowers") {
+			gains = gains.mul(2)
+		}
+
         if (tmp.nerdMode) return "Gain Formula: " + gainFormulaNormal(layer);
-        else return `${ player[layer].points.lt(1e3) ? (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "spend all your monies for ") : ""}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource} ${tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? `<br><br>you can afford the next at ${ (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt))} ${ tmp[layer].baseResource }` : ""}`
+        else return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "spend all your monies for "}+<b>${formatWhole(gains)}</b> ${tmp[layer].resource} <br><br>${(tmp[layer].nextDescription !== undefined ? tmp[layer].nextDescription : "you can afford the next at ")} ${ (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt))} ${ tmp[layer].baseResource }`
 	} 
 	else if(tmp[layer].type== "static") {
 		if (tmp.nerdMode) return "Cost Formula: "+costFormulaStatic(layer);
@@ -50,20 +60,6 @@ function prestigeButtonText(layer) {
 
 		else return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "exchange your cats for "}+<b>${formatWhole(gains)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"":"") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }		
 		`
-	} 
-	else if(tmp[layer].type== "garden") {
-		if (tmp.nerdMode) return "Cost Formula: "+costFormulaStatic(layer);
-		else return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "plant your cats for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"":"") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }		
-		`
-	} 
-	else if(tmp[layer].type== "essence") {
-		if (tmp.nerdMode) return "Cost Formula: "+costFormulaStatic(layer);
-		else return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "drain all your flowers essence for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"":"") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }		
-		`
-	} 
-	else if(tmp[layer].type == "shadow") {
-		if (tmp.nerdMode) return "Gain Formula: "+costFormulaStatic(layer);
-		else return `<MA style='font-family: url(\"fonts/cabin.ttf\")'> spend all your monies for ${ player[layer].points.lt(1e3) ? (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "") : ""}<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource} ${tmp[layer].resetGain.lt(1e333) && player[layer].points.lt(1e333) ? `<br><br>you can afford the next at ${ (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt))} ${ tmp[layer].baseResource }` : ""}`
 	} 
 	else if(tmp[layer].type == "none")
 		return ""
@@ -254,8 +250,6 @@ function prestigeNotify(layer) {
 	if (tmp[layer].autoPrestige || tmp[layer].passiveGeneration) return false
 	else if (tmp[layer].type == "static") return tmp[layer].canReset
 	else if (tmp[layer].type == "catfood") return tmp[layer].canReset
-	else if (tmp[layer].type == "garden") return tmp[layer].canReset
-	else if (tmp[layer].type == "essence") return tmp[layer].canReset
 	else if (tmp[layer].type == "normal") return (tmp[layer].canReset && (tmp[layer].resetGain.gte(player[layer].points.div(10))))
 	else return false
 }

@@ -4,9 +4,8 @@ addLayer("catfood", {
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() {
         return {
-            unlocked: true,
+            unlocked: false,
             points: new Decimal(0), // Currency
-
         }
     },
     branches: ["cats"],
@@ -43,6 +42,14 @@ addLayer("catfood", {
             Generation = new Decimal(5)
         }
 
+        if (player[this.layer].points.gte(12)) {
+            Generation = new Decimal(5.05)
+        }
+
+        if (player[this.layer].points.gte(14)) {
+            Generation = new Decimal(5.8)
+        }
+
         return Generation
     },
 
@@ -54,6 +61,7 @@ addLayer("catfood", {
             unlocked() { return (hasMilestone('cats', 2)) },
         },
     ],
+
     layerShown() {
         let visible = false
         if (hasMilestone('cats', 2)) {
@@ -148,7 +156,23 @@ addLayer("catfood", {
 
             effect() {
                 let mult = player[this.layer].points.add(1)
-                return mult.pow(1.5)
+                let powr = new Decimal(1.5)
+
+                if (hasUpgrade('catfood', 31)) {
+                    powr = new Decimal(2)
+                }
+
+                return mult.pow(powr)
+            },
+
+            tooltip() {
+                let powr = new Decimal(1.5)
+
+                if (hasUpgrade('catfood', 31)) {
+                    powr = new Decimal(2)
+                }
+
+                return "formula catfood^" + powr
             },
 
             effectDisplay() { return "ultimate feeder boost: " + format(upgradeEffect(this.layer, this.id)) + "x" },
@@ -166,6 +190,39 @@ addLayer("catfood", {
             description: "unlock even more cat upgrades",
             cost: new Decimal(8),
             unlocked() { return (hasUpgrade('catfood', 24) && hasMilestone('cats', 4)) },
+        },
+
+        31: {
+            title: "ultimate yummy cat food",
+            description: "boosts cat food upgrade 23",
+            cost: new Decimal(10),
+
+            tooltip() {
+                return "boosts it by +0.5"
+            },
+
+            unlocked() { return (hasUpgrade('catfood', 25) && hasMilestone('garden', 1)) },
+        },
+
+        32: {
+            title: "automatic adoption",
+            description: "get cat automation",
+            cost: new Decimal(12),
+            unlocked() { return (hasUpgrade('catfood', 31)) },
+        },
+
+        33: {
+            title: "Feed flowers cat food",
+            description: "Lowers flower softcap",
+            cost: new Decimal(14),
+            unlocked() { return (hasUpgrade('catfood', 32) && hasMilestone('garden', 4)) },
+        },
+
+        34: {
+            title: "Duplicating flower machine",
+            description: "Multiply flowers by 2",
+            cost: new Decimal(16),
+            unlocked() { return (hasUpgrade('catfood', 33) && hasMilestone('garden', 4)) },
         },
     },
 
