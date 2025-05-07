@@ -3,7 +3,12 @@ let modInfo = {
     id: "KITTIESREBORN",
     author: "Shoober",
     pointsName: "monies",
-    modFiles: ["layers.js", "tree.js"],
+    modFiles: [
+        "layers/cats.js",
+        "layers/catfood.js",
+        "layers/a.js",
+        "tree.js",
+    ],
 
     discordName: "Shoober's Trees Server",
     discordLink: "https://discord.gg/reRV6Wj359",
