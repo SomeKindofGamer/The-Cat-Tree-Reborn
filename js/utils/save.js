@@ -25,7 +25,8 @@ function startPlayerBase() {
         lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab),
 
         notation: "Scientific",
-        music: true
+        music: true,
+        sfx: true
     };
 }
 

@@ -300,7 +300,12 @@ function loadVue() {
                     ];
 
                     const randomMeow = new Audio(meowSounds[Math.floor(Math.random() * meowSounds.length)]);
-                    randomMeow.volume = 1;
+
+                    if (player.sfx) {
+                        randomMeow.volume = 1;
+                    } else {
+                        randomMeow.volume = 0;
+                    }
 
                     randomMeow.addEventListener('canplaythrough', () => {
                         setTimeout(() => {

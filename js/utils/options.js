@@ -30,6 +30,11 @@ function changeMusic() {
     needCanvasUpdate = true;
 }
 
+function changeSFX() {
+    player.sfx = !player.sfx;
+    needCanvasUpdate = true;
+}
+
 function toggleOpt(name) {
     if (name == "oldStyle" && styleCooldown > 0)
         return;

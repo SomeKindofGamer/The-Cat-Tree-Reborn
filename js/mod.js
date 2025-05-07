@@ -13,11 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-    num: "1.0",
+    num: "1.0.1",
     name: "Cat Tree Reborn",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.0.1</h3><br>
+		- Added SFX option<br>
+        - Added Hotkeys<br>
+        <br>
+
 	<h3>v1.0</h3><br>
 		- cats! ofc!<br>
         - 2 Layers<br>

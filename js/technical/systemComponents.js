@@ -145,6 +145,9 @@ var systemComponents = {
         <a class="link" href="http://discord.gg/wwQfgPa" target="_blank" v-bind:style="{'font-size': '16px'}">Main Prestige Tree server</a><br>
 		<br><br>
         You've spent {{ formatTimeAlt(player.timePlayed) }} grinding cats<br><br>
+
+        <h3>Hotkeys</h3><br>
+        <span v-for="key in hotkeys" v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked"><br>{{key.description}}</span></div>
     `
     },
 
@@ -153,6 +156,9 @@ var systemComponents = {
         <table>
             <tr>
 			    <td><button class="opt" onclick="changeMusic(); needsCanvasUpdate = true">Music: {{ player.music?"ON":"OFF" }}</button></td>
+				<td><button class="opt" onclick="changeSFX(); needsCanvasUpdate = true">SFX: {{ player.sfx?"ON":"OFF" }}</button></td>
+			</tr>
+			<tr>
                 <td><button class="opt" onclick="save()">Save</button></td>
                 <td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{ options.autosave?"ON":"OFF" }}</button></td>
                 <td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
