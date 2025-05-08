@@ -48,6 +48,7 @@ addLayer("garden", {
     effectDescription() {
         let softcapDescription = ""
         let layerEffect = tmp[this.layer].effect
+
         if (layerEffect.gte(new Decimal(200)) ) {
             softcapDescription = " (Softcapped)"
         }
@@ -115,7 +116,7 @@ addLayer("garden", {
             done() {
                 return player.garden.points.gte(100)
             },
-            unlocked() { return player.garden.points.gte(60) },
+            unlocked() { return player.garden.points.gte(60) || hasMilestone("garden", 2) },
         },
 
         3: {
@@ -124,7 +125,7 @@ addLayer("garden", {
             done() {
                 return (player.garden.points.gte(200) && hasUpgrade("garden", 12))
             },
-            unlocked() { return hasUpgrade("garden", 12) },
+            unlocked() { return hasUpgrade("garden", 12) || hasMilestone("garden", 3) },
         },
 
         4: {
@@ -133,7 +134,7 @@ addLayer("garden", {
             done() {
                 return (player.garden.points.gte(1000) && hasUpgrade("garden", 13))
             },
-            unlocked() { return hasUpgrade("garden", 13) },
+            unlocked() { return hasUpgrade("garden", 13) || hasMilestone("garden", 4) },
         },
 
         5: {
@@ -142,7 +143,7 @@ addLayer("garden", {
             done() {
                 return (player.garden.points.gte(3000) && hasUpgrade("catfood", 34))
             },
-            unlocked() { return hasUpgrade("catfood", 34) },
+            unlocked() { return hasUpgrade("catfood", 34) || hasMilestone("garden", 5) },
         },
     },
 
@@ -183,7 +184,28 @@ addLayer("garden", {
     infoboxes:{
         stuff: {
             title: "The Garden!",
-            body() { return "Welcome to The Garden! You can plant your cats here to unlock milestones which unlock more content! This layer is not connected to Cat Food so it won't reset cat food only cats. You'll keep all your Cat Milestones but you'll lose all your cat upgrades. You can only reset once you've reached 20 cats and 12 cat food." },
+            body() { 
+                let desc = "Welcome to The Garden! You can plant your cats here to unlock milestones which unlock more content! This layer is not connected to Cat Food so it won't reset cat food only cats. You'll keep all your Cat Milestones but you'll lose all your cat upgrades. You can only reset once you've reached 20 cats and 12 cat food."
+                return desc
+            },
+        },
+
+        softcap: {
+            title: "Garden Softcap!",
+            body() { 
+                let desc = "You've reached the softcap. This is here so you just dont get infinite flowers for infinite monies. In the future there will be upgrades where you can lower the softcap effect. Currently theres only one in Cat Food."
+                return desc
+            },
+            unlocked() {
+                let unlocked = false
+                let layerEffect = tmp[this.layer].effect
+
+                if (layerEffect.gte(new Decimal(200))) {
+                    unlocked = true
+                }
+
+                return unlocked
+            }   
         }
     },
 
@@ -196,6 +218,11 @@ addLayer("garden", {
                 "blank",
                 "blank",
                 ["infobox", "stuff"],
+                "blank",
+                "blank",
+                ["infobox", "softcap"],
+                "blank",
+                "blank",
             ]
         },
 
