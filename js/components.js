@@ -275,7 +275,12 @@ function loadVue() {
                     'resources/cats/cat6.png',
                     'resources/cats/cat7.png'
                 ];
-                const catAmount = player.cats.points
+
+                let catAmount = player.cats.points
+
+                if (catAmount.gte(3)) {
+                    catAmount = new Decimal(3)
+                }
 
                 const catCount = Math.floor(Math.random() * catAmount) + 1;
 
@@ -386,7 +391,7 @@ function loadVue() {
     Vue.component('main-display', {
         props: ['layer', 'data'],
         template: `
-		<div><span v-if="player[layer].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px ' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2> {{tmp[layer].resource}}<span v-if="layers[layer].effectDescription">, <span v-html="run(layers[layer].effectDescription, layers[layer])"></span></span><br><br></div>
+		<div><span v-if="player[layer].points.lt('1e1000')"> {{(tmp[layer].resourceDescription !== undefined ? tmp[layer].resourceDescription : "You have ")}} </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px ' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2> {{tmp[layer].resource}}<span v-if="layers[layer].effectDescription">, <span v-html="run(layers[layer].effectDescription, layers[layer])"></span></span><br><br></div>
 		`
     })
 
