@@ -19,7 +19,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-    num: "1.1",
+    num: "1.2",
     name: "Cat Tree Reborn",
 }
 

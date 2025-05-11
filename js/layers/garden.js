@@ -130,7 +130,7 @@ addLayer("garden", {
 
         4: {
             requirementDescription: "Beautiful flowers! (1,000)",
-            effectDescription: "10 monies and Unlock more Cat Food Upgrades",
+            effectDescription: "10x monies and Unlock more Cat Food Upgrades",
             done() {
                 return (player.garden.points.gte(1000) && hasUpgrade("garden", 13))
             },
@@ -139,7 +139,7 @@ addLayer("garden", {
 
         5: {
             requirementDescription: "What's that? (3,000)",
-            effectDescription: "Unlock a new layer... (soon)",
+            effectDescription: "Unlock a new layer...",
             done() {
                 return (player.garden.points.gte(3000) && hasUpgrade("catfood", 34))
             },
