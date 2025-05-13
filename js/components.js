@@ -259,77 +259,9 @@ function loadVue() {
             handleReset() {
                 if (tmp[this.layer].canReset) {
                     doReset(this.layer);
-                    this.spawnCat();
+                    //this.spawnCat();
                 }
             },
-            spawnCat() {
-                const container = document.getElementById('cat-container');
-                if (!container) return;
-
-                const catImages = [
-                    'resources/cats/cat1.png',
-                    'resources/cats/cat2.png',
-                    'resources/cats/cat3.png',
-                    'resources/cats/cat4.png',
-                    'resources/cats/cat5.png',
-                    'resources/cats/cat6.png',
-                    'resources/cats/cat7.png'
-                ];
-
-                let catAmount = player.cats.points
-
-                if (catAmount.gte(3)) {
-                    catAmount = new Decimal(3)
-                }
-
-                const catCount = Math.floor(Math.random() * catAmount) + 1;
-
-                for (let i = 0; i < catCount; i++) {
-                    const cat = document.createElement('img');
-                    cat.src = catImages[Math.floor(Math.random() * catImages.length)];
-
-                    cat.style.position = 'absolute';
-                    cat.style.left = Math.random() * 90 + '%';
-                    cat.style.bottom = '0px';
-                    cat.style.width = '50px';
-                    cat.style.height = '50px';
-                    cat.style.transform = `rotate(${Math.random() * 360}deg)`;
-                    cat.style.transition = 'transform 2s ease, bottom 2s ease, opacity 2s ease';
-                    cat.style.pointerEvents = 'none';
-                    container.appendChild(cat);
-
-                    const meowSounds = [
-                        'resources/sounds/meow.mp3',
-                        'resources/sounds/meow2.mp3',
-                        'resources/sounds/meow3.mp3'
-                    ];
-
-                    const randomMeow = new Audio(meowSounds[Math.floor(Math.random() * meowSounds.length)]);
-
-                    if (player.sfx) {
-                        randomMeow.volume = 1;
-                    } else {
-                        randomMeow.volume = 0;
-                    }
-
-                    randomMeow.addEventListener('canplaythrough', () => {
-                        setTimeout(() => {
-                            randomMeow.play();
-                        }, i * 75);
-                    }, { once: true });
-
-                    setTimeout(() => {
-                        cat.style.bottom = (70 + Math.random() * 20) + 'vh';
-                        cat.style.transform = `rotate(${Math.random() * 360}deg) scale(1.2)`;
-                        cat.style.opacity = '0';
-                    }, 50);
-
-                    setTimeout(() => {
-                        container.removeChild(cat);
-                    }, 2500);
-                }
-
-            }
         }
     });
 
@@ -368,24 +300,23 @@ function loadVue() {
 		`,
     });
 
-    Vue.component('portal-prestige-button', {
-        props: ['layer', 'data'],
-        template: `
-			<button v-if="(tmp[layer].type !== 'none')" 
-				v-bind:class="{ [layer]: true, reset: true, locked: !tmp[layer].canReset, can: tmp[layer].canReset}"
-				v-bind:style="[
-					tmp[layer].canReset ? {
-						'background': 'linear-gradient(#5b1d75, #b64be3)'
-					} : {},
-					tmp[layer].componentStyles['prestige-button']
-				]"
-				v-html="prestigeButtonText(layer)" 
-				v-on:click="doReset(layer)">
-			</button>
-		`,
-    });
-
-
+Vue.component('dog-prestige-button', {
+	props: ['layer', 'data'],
+	template: `
+		<button v-if="(tmp[layer].type !== 'none')" 
+			v-bind:class="{ [layer]: true, reset: true, locked: !tmp[layer].canReset, can: tmp[layer].canReset}"
+			v-bind:style="[
+				tmp[layer].canReset ? {
+					'background': 'linear-gradient(#4b371c, #2e1503)'
+				} : {},
+				{ color: 'white' },
+				tmp[layer].componentStyles['prestige-button']
+			]"
+			v-html="prestigeButtonText(layer)" 
+			v-on:click="doReset(layer)">
+		</button>
+	`,
+});
 
     // Displays the main resource for the layer
     Vue.component('main-display', {

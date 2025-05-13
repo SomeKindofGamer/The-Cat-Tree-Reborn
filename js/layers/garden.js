@@ -18,6 +18,7 @@ addLayer("garden", {
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 1, // Prestige currency exponent
     base: new Decimal(5), // Only needed for static layers, base of the formula (b^(x^exp))
+    
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -37,10 +38,18 @@ addLayer("garden", {
 
     effect() {
         let gardenBoost = player[this.layer].points.add(1).pow(0.75)
-        let sfcap = 0.35
-        if (hasUpgrade('catfood', 33)) sfcap = 0.5
+        let sfcap = new Decimal(0.35)
+        let sfcap2 = new Decimal(0.2)
+
+        if (hasUpgrade('catfood', 33)) {
+            sfcap = sfcap.add(0.15), 
+            sfcap2 = sfcap2.add(0.15)
+        }
 
         softcappedEffect = softcap(gardenBoost, new Decimal(200), sfcap)
+        if (softcappedEffect >= 500) {
+            softcappedEffect = softcap(gardenBoost, new Decimal(500), sfcap2)
+        }
 
         return softcappedEffect
     },
@@ -57,7 +66,7 @@ addLayer("garden", {
     },
 
     canReset() {
-        return (player.cats.points.gte(20) && player.catfood.points.gte(12))
+        return (player.cats.points.gte(20) && player.catfood.points.gte(10))
     },
 
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -66,7 +75,15 @@ addLayer("garden", {
     },
 
     doReset(resettingLayer) {
+        if (resettingLayer === 'dogs') {
+            let savedMilestones = [];
+            let upgradesToKeep = [];
 
+            layerDataReset(this.layer);
+
+            player.garden.upgrades = upgradesToKeep;
+            player.garden.milestones = savedMilestones;
+        }
     },
 
     row: 0, // Row the layer is in on the tree (0 is the first row)
@@ -90,6 +107,33 @@ addLayer("garden", {
         }
 
         return visible
+    },
+
+    passiveGeneration() {
+        let gains = new Decimal(0)
+
+        if (hasMilestone("dogs", 3) && canReset(this.layer) && hasMilestone('cats', 5)) {
+            gains = gains.add(1)
+            gains = gains.mul(layers.dogs.effect().boostfood)
+        }
+
+        if (hasUpgrade("garden", 12)) {
+            gains = gains.mul(2)
+        }
+
+        if (hasUpgrade("catfood", 34)) {
+            gains = gains.mul(2)
+        }
+
+		if (hasMilestone("dogs", 1)) {
+            gains = gains.mul(2)
+        }
+
+        if (hasMilestone("dogs", 2)) {
+            gains = gains.mul(3)
+        }
+
+        return gains
     },
 
     milestones: {
@@ -179,13 +223,20 @@ addLayer("garden", {
             cost: new Decimal(350),
             unlocked() { return (hasUpgrade('garden', 12)) },
         },
+
+        14: {
+            title: "tape flowers to the cats",
+            description: "boosts cat upgrade 23",
+            cost: new Decimal(100_000),
+            unlocked() { return (hasUpgrade('garden', 13) && hasMilestone('dogs', 4)) },
+        },
     },
 
     infoboxes:{
         stuff: {
             title: "The Garden!",
             body() { 
-                let desc = "Welcome to The Garden! You can plant your cats here to unlock milestones which unlock more content! This layer is not connected to Cat Food so it won't reset cat food only cats. You'll keep all your Cat Milestones but you'll lose all your cat upgrades. You can only reset once you've reached 20 cats and 12 cat food."
+                let desc = "Welcome to The Garden! You can plant your cats here to unlock milestones which unlock more content! This layer is not connected to Cat Food so it won't reset cat food only cats. You'll keep all your Cat Milestones but you'll lose all your cat upgrades. You can only reset once you've reached 20 cats and 10 cat food."
                 return desc
             },
         },
@@ -212,6 +263,7 @@ addLayer("garden", {
     tabFormat: {
         "Garden": {
             content: ["main-display",
+                "resource-display",
                 "garden-prestige-button",
                 "blank",
                 "milestones",

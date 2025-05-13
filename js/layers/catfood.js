@@ -50,14 +50,21 @@ addLayer("catfood", {
             Generation = new Decimal(5.8)
         }
 
+        if (player[this.layer].points.gte(20)) {
+            Generation = new Decimal(5.5)
+        }
+
+        //Generation = Generation.mul(layers.dogs.effect().boostfood)
+
         return Generation
     },
 
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
-        {key: "f",
+        {
+            key: "f",
             description: "F: Perform a Cat Food Reset!",
-            onPress(){if (canReset(this.layer)) doReset(this.layer)},
+            onPress() { if (canReset(this.layer)) doReset(this.layer) },
             unlocked() { return (hasMilestone('cats', 2)) },
         },
     ],

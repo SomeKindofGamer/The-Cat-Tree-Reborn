@@ -67,7 +67,7 @@ addLayer("a", {
             done() { return hasUpgrade("catfood", 25) },
             tooltip: "Unlock Feline Fortune", // Showed when the achievement is completed
             onComplete() { player.a.points = player.a.points.add(1) },
-            unlocked() { return hasUpgrade("catfood", 25) },
+            unlocked() { return hasAchievement("a", 23) },
         },
 
         24: {
@@ -75,7 +75,7 @@ addLayer("a", {
             done() { return hasMilestone("cats", 5) },
             tooltip: "Get cat milestone 5 and unlock a new layer!", // Showed when the achievement is completed
             onComplete() { player.a.points = player.a.points.add(1) },
-            unlocked() { return hasMilestone("cats", 5) },
+            unlocked() { return hasAchievement("a", 24) },
         },
 
         25: {
@@ -83,7 +83,7 @@ addLayer("a", {
             done() { return player.garden.points.gte(1) },
             tooltip: "Plant your first cat!", // Showed when the achievement is completed
             onComplete() { player.a.points = player.a.points.add(1) },
-            unlocked() { return hasMilestone("cats", 5) },
+            unlocked() { return hasAchievement("a", 25) },
         },
 
         31: {
@@ -91,7 +91,7 @@ addLayer("a", {
             done() { return player.garden.points.gte(100) },
             tooltip: "Plant 100 cats!", // Showed when the achievement is completed
             onComplete() { player.a.points = player.a.points.add(1) },
-            unlocked() { return hasMilestone("cats", 5) },
+            unlocked() { return hasAchievement("a", 31) },
         },
 
         32: {
@@ -99,7 +99,7 @@ addLayer("a", {
             done() { return hasUpgrade("cats", 33) },
             tooltip: "Take over the world with CATS!", // Showed when the achievement is completed
             onComplete() { player.a.points = player.a.points.add(1) },
-            unlocked() { return hasUpgrade("cats", 33) },
+            unlocked() { return hasAchievement("a", 32) },
         },
 
         33: {
@@ -107,15 +107,30 @@ addLayer("a", {
             done() { return player.garden.points.gte(3000) },
             tooltip: "Plant 3,000 cats and unlock a new layer!", // Showed when the achievement is completed
             onComplete() { player.a.points = player.a.points.add(1) },
-            unlocked() { return player.garden.points.gte(3000) },
+            unlocked() { return hasAchievement("a", 33) },
+        },
+
+        34: {
+            name: "Woof woof!",
+            done() { return player.dogs.points.gte(1) },
+            tooltip: "Get your first... dog?", // Showed when the achievement is completed
+            onComplete() { player.a.points = player.a.points.add(1) },
+            unlocked() { return hasAchievement("a", 34) },
+        },
+
+        35: {
+            name: "Woof woof woof!",
+            done() { return player.dogs.points.gte(5) },
+            tooltip: "Get 5 dogs!", // Showed when the achievement is completed
+            onComplete() { player.a.points = player.a.points.add(1) },
+            unlocked() { return hasAchievement("a", 35) },
         },
     },
 
     tabFormat: [
         ["display-text", function() { return "<MA style='font-size: 25px; font-family: url(\"fonts/cabin.ttf\")'>Achievements ~ " + player.a.achievements.length + " / " + (Object.keys(tmp.a.achievements).length - 2) }],
         "blank",
-        "blank", 
-        ["row", [
+        "blank", ["row", [
             ["achievement", 11],
             ["achievement", 12],
             ["achievement", 13],
@@ -134,6 +149,8 @@ addLayer("a", {
             ["achievement", 31],
             ["achievement", 32],
             ["achievement", 33],
+            ["achievement", 34],
+            ["achievement", 35],
         ]],
 
         "blank",

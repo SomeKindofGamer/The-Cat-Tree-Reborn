@@ -157,6 +157,7 @@ var systemComponents = {
             <tr>
 			    <td><button class="opt" onclick="changeMusic(); needsCanvasUpdate = true">Music: {{ player.music?"ON":"OFF" }}</button></td>
 				<td><button class="opt" onclick="changeSFX(); needsCanvasUpdate = true">SFX: {{ player.sfx?"ON":"OFF" }}</button></td>
+				<td><button class="opt" onclick="changeFlyingCats(); needsCanvasUpdate = true">Flying cat effect: {{ player.flyingCats?"ON":"OFF" }}</button></td>
 			</tr>
 			<tr>
                 <td><button class="opt" onclick="save()">Save</button></td>

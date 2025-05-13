@@ -7,6 +7,7 @@ let modInfo = {
         "layers/cats.js",
         "layers/catfood.js",
         "layers/garden.js",
+        "layers/dogs.js",
         "layers/a.js",
         "tree.js",
     ],
@@ -77,15 +78,21 @@ function getPointGen() {
     if (hasUpgrade('cats', 31)) gain = gain.times(upgradeEffect('cats', 31))
     if (hasUpgrade('cats', 32)) gain = gain.times(upgradeEffect('cats', 32))
     if (hasUpgrade('cats', 33)) gain = gain.times(upgradeEffect('cats', 33))
-    
+
     // Cat Food Layer
     if (hasUpgrade('catfood', 11)) gain = gain.times(2)
     if (hasUpgrade('catfood', 12)) gain = gain.times(3)
     if (hasUpgrade('catfood', 13)) gain = gain.times(upgradeEffect('catfood', 13))
-    
+
     // Garden Layer
     gain = gain.times(layers.garden.effect())
     if (hasMilestone('garden', 4)) gain = gain.times(10)
+
+    // Dog Layer
+    if (hasMilestone('dogs', 0)) gain = gain.times(3.5)
+    if (hasMilestone('dogs', 3)) gain = gain.times(milestoneEffect('dogs', 3))
+        
+    gain = gain.times(layers.dogs.effect().boost)
 
     return gain
 }
@@ -100,7 +107,7 @@ var displayThings = []
 
 // Determines when the game "ends"
 function isEndgame() {
-    return player.garden.points.gte(3000)
+    return player.dogs.points.gte(10000)
 }
 
 // Less important things beyond this point!

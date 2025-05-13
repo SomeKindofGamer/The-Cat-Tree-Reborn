@@ -27,6 +27,10 @@ addLayer("cats", {
         return "You've adopted "
     },
 
+    nextDescription() {
+        return "You can adopt another cat at "
+    },
+
     autoPrestige() {
         if (hasUpgrade('catfood', 32)) {
             return true
@@ -85,6 +89,23 @@ addLayer("cats", {
 
             Generation = Generation.times(multer)
         }
+
+        if (player.cats.points.gte(35)) {
+            let multer = new Decimal(0.8)
+
+            Generation = Generation.times(multer)
+        }
+
+        if (player.cats.points.gte(37)) {
+            let multer = new Decimal(0.8)
+
+            Generation = Generation.times(multer)
+        }
+
+
+        if (hasMilestone("dogs", 1)) {
+           Generation = Generation.times(1.5)
+        }
         
         return Generation
     },
@@ -114,6 +135,16 @@ addLayer("cats", {
             if (hasUpgrade('garden', 13)) {
                 upgradesToKeep = player.cats.upgrades.slice();
             }
+
+            layerDataReset(this.layer);
+
+            player.cats.upgrades = upgradesToKeep;
+            player.cats.milestones = savedMilestones;
+        }
+        
+        if (resettingLayer === 'dogs') {
+            let savedMilestones = [];
+            let upgradesToKeep = [];
 
             layerDataReset(this.layer);
 
@@ -174,6 +205,15 @@ addLayer("cats", {
                 return player.cats.points.gte(20)
             },
             unlocked() { return hasUpgrade("catfood", 25) },
+        },
+
+        6: {
+            requirementDescription: "Ready to plant? (45)",
+            effectDescription: "template this'll unlock something",
+            done() {
+                return player.cats.points.gte(45)
+            },
+            unlocked() { return hasMilestone("dogs", 4) },
         },
     },
 
@@ -302,7 +342,7 @@ addLayer("cats", {
                 if (player.points.gte(10)) {
                     let catpower = new Decimal(0.006)
                     if (hasUpgrade('catfood', 24)) {
-                        catpower = new Decimal(0.012)
+                        catpower = catpower.add(0.006)
                     }
 
                     return player.points.add(1).pow(catpower)
@@ -330,6 +370,10 @@ addLayer("cats", {
 
             effect() {
                 let pow = new Decimal(0.65)
+
+                if (hasUpgrade('garden', 14)) {
+                    pow = pow.add(0.25)
+                }
 
                 return player[this.layer].points.add(1).pow(pow)
             },

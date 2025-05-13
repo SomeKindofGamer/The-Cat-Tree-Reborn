@@ -35,6 +35,11 @@ function changeSFX() {
     needCanvasUpdate = true;
 }
 
+function changeFlyingCats() {
+    player.flyingCats = !player.flyingCats;
+    needCanvasUpdate = true;
+}
+
 function toggleOpt(name) {
     if (name == "oldStyle" && styleCooldown > 0)
         return;
