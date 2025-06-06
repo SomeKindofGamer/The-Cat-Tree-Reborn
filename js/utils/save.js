@@ -26,7 +26,8 @@ function startPlayerBase() {
 
         notation: "Scientific",
         music: true,
-        sfx: true
+        sfx: true,
+        flyingCats: true
     };
 }
 

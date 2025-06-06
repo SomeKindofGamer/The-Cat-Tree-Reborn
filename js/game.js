@@ -145,7 +145,7 @@ function rowReset(row, layer) {
             if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
             run(layers[lr].doReset, layers[lr], layer)
         } else
-        if (tmp[layer].row > tmp[lr].row && !isNaN(row)) layerDataReset(lr)
+            if (tmp[layer].row > tmp[lr].row && !isNaN(row)) layerDataReset(lr)
     }
 }
 
@@ -182,6 +182,74 @@ function generatePoints(layer, diff) {
     addPoints(layer, tmp[layer].resetGain.times(diff))
 }
 
+function spawnCat() {
+    const container = document.getElementById('cat-container');
+    if (!container) return;
+
+    const catImages = [
+        'resources/cats/cat1.png',
+        'resources/cats/cat2.png',
+        'resources/cats/cat3.png',
+        'resources/cats/cat4.png',
+        'resources/cats/cat5.png',
+        'resources/cats/cat6.png',
+        'resources/cats/cat7.png'
+    ];
+
+    let catAmount = player.cats.points
+
+    if (catAmount.gte(3)) {
+        catAmount = new Decimal(3)
+    }
+
+    const catCount = Math.floor(Math.random() * catAmount) + 1;
+
+    const meowSounds = [
+        'resources/sounds/meow.mp3',
+        'resources/sounds/meow2.mp3',
+        'resources/sounds/meow3.mp3'
+    ];
+
+    const randomMeow = new Audio(meowSounds[Math.floor(Math.random() * meowSounds.length)]);
+
+    if (player.sfx) {
+        randomMeow.volume = 1;
+    } else {
+        randomMeow.volume = 0;
+    }
+
+    randomMeow.addEventListener('canplaythrough', () => {
+        randomMeow.play();
+    }, { once: true });
+
+    if (player.flyingCats) {
+        for (let i = 0; i < catCount; i++) {
+            const cat = document.createElement('img');
+            cat.src = catImages[Math.floor(Math.random() * catImages.length)];
+
+            cat.style.position = 'absolute';
+            cat.style.left = Math.random() * 90 + '%';
+            cat.style.bottom = '0px';
+            cat.style.width = '50px';
+            cat.style.height = '50px';
+            cat.style.transform = `rotate(${Math.random() * 360}deg)`;
+            cat.style.transition = 'transform 2s ease, bottom 2s ease, opacity 2s ease';
+            cat.style.pointerEvents = 'none';
+            container.appendChild(cat);
+
+            setTimeout(() => {
+                cat.style.bottom = (70 + Math.random() * 20) + 'vh';
+                cat.style.transform = `rotate(${Math.random() * 360}deg) scale(1.2)`;
+                cat.style.opacity = '0';
+            }, 50);
+
+            setTimeout(() => {
+                container.removeChild(cat);
+            }, 2500);
+        }
+    }
+}
+
 function doReset(layer, force = false) {
     if (tmp[layer].type == "none") return
     let row = tmp[layer].row
@@ -192,13 +260,33 @@ function doReset(layer, force = false) {
         if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
         let gain = tmp[layer].resetGain
 
-		if (hasUpgrade("garden", 12) && tmp[layer].resource == "flowers") {
-			gain = gain.mul(2)
-		}
+        if (hasUpgrade("garden", 12) && tmp[layer].resource == "flowers") {
+            gain = gain.mul(2)
+        }
 
         if (hasUpgrade("catfood", 34) && tmp[layer].resource == "flowers") {
-			gain = gain.mul(2)
-		}
+            gain = gain.mul(2)
+        }
+
+        if (hasMilestone("dogs", 1) && tmp[layer].resource == "flowers") {
+            gain = gain.mul(2)
+        }
+
+        if (hasMilestone("dogs", 2) && tmp[layer].resource == "flowers") {
+            gain = gain.mul(3)
+        }
+
+        if (hasUpgrade("garden", 15) && tmp[layer].resource == "flowers") {
+            gain = gain.mul(1.5)
+        }
+
+        if (tmp[layer].resource == "flowers") {
+            gain = gain.mul(layers.dogs.effect().boostfood)
+        }
+
+        if (hasUpgrade("garden", 21) && tmp[layer].resource == "dogs") {
+            gain = gain.mul(2)
+        }
 
         if (tmp[layer].type == "static") {
             if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
@@ -207,10 +295,10 @@ function doReset(layer, force = false) {
 
         if (tmp[layer].type == "catfood") {
             if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
-            let gains = 1
+            let gains = new Decimal(2)
 
             if (hasUpgrade("catfood", 24)) {
-                gains = 2
+                gains = gains.mul(2)
             }
 
             gain = (tmp[layer].canBuyMax ? gain : gains)
@@ -252,6 +340,10 @@ function doReset(layer, force = false) {
     }
 
     player[layer].resetTime = 0
+
+    if (layer == "cats") {
+        spawnCat()
+    }
 
     updateTemp()
     updateTemp()
@@ -352,7 +444,7 @@ function gameLoop(diff) {
     if (isNaN(diff) || diff < 0) diff = 0
     if (tmp.gameEnded && !player.keepGoing) {
         diff = 0
-            //player.tab = "tmp.gameEnded"
+        //player.tab = "tmp.gameEnded"
         clearParticles()
     }
 
@@ -418,7 +510,7 @@ function hardReset(resetOptions) {
 
 var ticking = false
 
-var interval = setInterval(function() {
+var interval = setInterval(function () {
     if (player === undefined || tmp === undefined) return;
     if (ticking) return;
     if (tmp.gameEnded && !player.keepGoing) return;
@@ -453,4 +545,4 @@ var interval = setInterval(function() {
     ticking = false
 }, 50)
 
-setInterval(function() { needCanvasUpdate = true }, 500)
+setInterval(function () { needCanvasUpdate = true }, 500)
