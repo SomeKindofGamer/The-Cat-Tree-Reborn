@@ -208,8 +208,8 @@ addLayer("cats", {
         },
 
         6: {
-            requirementDescription: "Ready to plant? (45)",
-            effectDescription: "template this'll unlock something",
+            requirementDescription: "The next step. (45)",
+            effectDescription: "We've taken over earth. Now it's time for something else. (Coming soon!)",
             done() {
                 return player.cats.points.gte(45)
             },

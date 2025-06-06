@@ -276,8 +276,16 @@ function doReset(layer, force = false) {
             gain = gain.mul(3)
         }
 
+        if (hasUpgrade("garden", 15) && tmp[layer].resource == "flowers") {
+            gain = gain.mul(1.5)
+        }
+
         if (tmp[layer].resource == "flowers") {
             gain = gain.mul(layers.dogs.effect().boostfood)
+        }
+
+        if (hasUpgrade("garden", 21) && tmp[layer].resource == "dogs") {
+            gain = gain.mul(2)
         }
 
         if (tmp[layer].type == "static") {

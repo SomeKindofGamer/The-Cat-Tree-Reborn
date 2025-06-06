@@ -125,18 +125,37 @@ addLayer("a", {
             onComplete() { player.a.points = player.a.points.add(1) },
             unlocked() { return hasAchievement("a", 35) },
         },
+        
+        41: {
+            name: "Endless flower fields",
+            done() { return player.garden.points.gte(250000) },
+            tooltip: "Get 250,000 Flowers!", // Showed when the achievement is completed
+            onComplete() { player.a.points = player.a.points.add(1) },
+            unlocked() { return hasAchievement("a", 41) },
+        },
+
+        42: {
+            name: "The next step.",
+           done() { return hasMilestone("cats", 6) },
+            tooltip: "Unlock cat milestone 6", // Showed when the achievement is completed
+            onComplete() { player.a.points = player.a.points.add(1) },
+            unlocked() { return hasAchievement("a", 41) },
+        },
     },
 
     tabFormat: [
         ["display-text", function() { return "<MA style='font-size: 25px; font-family: url(\"fonts/cabin.ttf\")'>Achievements ~ " + player.a.achievements.length + " / " + (Object.keys(tmp.a.achievements).length - 2) }],
         "blank",
-        "blank", ["row", [
+        "blank",
+        
+        ["row", [
             ["achievement", 11],
             ["achievement", 12],
             ["achievement", 13],
             ["achievement", 14],
             ["achievement", 15],
         ]],
+
         ["row", [
             ["achievement", 21],
             ["achievement", 22],
@@ -151,6 +170,11 @@ addLayer("a", {
             ["achievement", 33],
             ["achievement", 34],
             ["achievement", 35],
+        ]],
+
+        ["row", [
+            ["achievement", 41],
+            ["achievement", 42]
         ]],
 
         "blank",

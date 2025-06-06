@@ -133,6 +133,10 @@ addLayer("garden", {
             gains = gains.mul(3)
         }
 
+        if (hasUpgrade("garden", 15)) {
+            gains = gains.mul(1.5)
+        }
+
         return gains
     },
 
@@ -229,6 +233,20 @@ addLayer("garden", {
             description: "boosts cat upgrade 23",
             cost: new Decimal(100_000),
             unlocked() { return (hasUpgrade('garden', 13) && hasMilestone('dogs', 4)) },
+        },
+
+        15: {
+            title: "plant fish flowers",
+            description: "basically this'll make cats more happy cause of fish and cause of fish they'll get more happy therefore its gonna boost flower gain by x1.5",
+            cost: new Decimal(250_000),
+            unlocked() { return (hasUpgrade('garden', 14) && hasMilestone('dogs', 5)) },
+        },
+
+        21: {
+            title: "plant bone flowers",
+            description: "this'll make dogs happier cause theres a stereotype that all dogs like bones (mine doesn't) so basically this upgrade will double dog gain",
+            cost: new Decimal(500_000),
+            unlocked() { return (hasUpgrade('garden', 15) && hasMilestone('dogs', 5)) },
         },
     },
 

@@ -49,6 +49,14 @@ function prestigeButtonText(layer) {
             gains = gains.mul(3)
         }
 
+        if (hasUpgrade("garden", 15) && tmp[layer].resource == "flowers") {
+            gains = gains.mul(1.5)
+        }
+
+        if (hasUpgrade("garden", 21) && tmp[layer].resource == "dogs") {
+            gains = gains.mul(2)
+        }
+
         if (tmp[layer].resource == "flowers") {
             gains = gains.mul(layers.dogs.effect().boostfood)
         }

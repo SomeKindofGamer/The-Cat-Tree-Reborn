@@ -140,7 +140,7 @@ addLayer("dogs", {
         },
 
         4: {
-            requirementDescription: "doggo army (15)",
+            requirementDescription: "flower doggos (15)",
             effectDescription: "Unlock another flower upgrade and a new cat milestone",
             done() {
                 return player.dogs.points.gte(15)
@@ -149,7 +149,7 @@ addLayer("dogs", {
         },
 
         5: {
-            requirementDescription: "doggo army (40)",
+            requirementDescription: "endless growing empire (40)",
             effectDescription: "Unlock more flower upgrades",
             done() {
                 return player.dogs.points.gte(40)

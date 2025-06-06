@@ -25,6 +25,13 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+    <h3>v1.2</h3><br>
+		- 1 new layer!<br>
+        - 3 new upgrades!<br>
+        - 7 new milestones!<br>
+        - 4 new achievements!<br>
+        <br>
+
     <h3>v1.1</h3><br>
 		- 1 new layer!<br>
         - 11 new upgrades!<br>
@@ -45,7 +52,7 @@ let changelog = `<h1>Changelog:</h1><br>
         - 19 upgrades<br>
 		`
 
-let winText = `Congratulations! You've reached 3,000 Flowers and beat the game till next update!, but for now...`
+let winText = `Congratulations! You've officially taken over the planet and beat the game till next update!, but for now...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -107,7 +114,7 @@ var displayThings = []
 
 // Determines when the game "ends"
 function isEndgame() {
-    return player.dogs.points.gte(10000)
+    return hasMilestone("cats", 6)
 }
 
 // Less important things beyond this point!
