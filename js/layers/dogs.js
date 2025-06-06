@@ -161,7 +161,7 @@ addLayer("dogs", {
     layerShown() {
         let visible = false
 
-        if (hasMilestone('garden', 5)) {
+        if (hasAchievement("a", 33)) {
             visible = true
         }
 
