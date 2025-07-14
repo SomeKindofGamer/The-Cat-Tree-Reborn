@@ -295,9 +295,13 @@ function doReset(layer, force = false) {
 
         if (tmp[layer].type == "catfood") {
             if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
-            let gains = new Decimal(2)
+            let gains = new Decimal(1)
 
             if (hasUpgrade("catfood", 24)) {
+                gains = gains.mul(2)
+            }
+
+            if (hasMilestone("dogs", 0)) {
                 gains = gains.mul(2)
             }
 

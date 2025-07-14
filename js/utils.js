@@ -74,6 +74,10 @@ function prestigeButtonText(layer) {
             gains = gains.mul(2)
         }
 
+        if (hasMilestone("dogs", 0)) {
+            gains = gains.mul(2)
+        }
+
         if (tmp.nerdMode) return "Cost Formula: " + costFormulaStatic(layer);
 
         else return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "exchange your cats for "}+<b>${formatWhole(gains)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"":"") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }		
