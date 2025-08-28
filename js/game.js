@@ -303,6 +303,8 @@ function doReset(layer, force = false) {
 
         if (tmp[layer].type == "catfood") {
             if (am.lt(tmp[layer].nextAt)) return;
+            if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
+          
             let gains = new Decimal(1)
 
             if (hasUpgrade("catfood", 24)) {
