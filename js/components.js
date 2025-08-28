@@ -177,9 +177,9 @@ function loadVue() {
 		<div v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!==undefined">
 			<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data]!== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" v-bind:class="{ [layer]: true, tooltipBox: true, upg: true, bought: hasUpgrade(layer, data), locked: (!(canAffordUpgrade(layer, data))&&!hasUpgrade(layer, data)), can: (canAffordUpgrade(layer, data)&&!hasUpgrade(layer, data))}"
 			v-bind:style="[((!hasUpgrade(layer, data) && canAffordUpgrade(layer, data)) ? {'background-color': tmp[layer].color} : {}), tmp[layer].upgrades[data].style]">
-			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
+            <span class='upgNum'>{{data}}</span>
+            <span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
 			<span v-else>
-			<span class='upgNum'>{{data}}</span>
 				<span v-if= "tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
 				<span v-html="tmp[layer].upgrades[data].description"></span>
 				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span>
@@ -318,6 +318,42 @@ Vue.component('dog-prestige-button', {
 	`,
 });
 
+Vue.component('space-prestige-button', {
+	props: ['layer', 'data'],
+	template: `
+		<button v-if="(tmp[layer].type !== 'none')" 
+			v-bind:class="{ [layer]: true, reset: true, locked: !tmp[layer].canReset, can: tmp[layer].canReset}"
+			v-bind:style="[
+				tmp[layer].canReset ? {
+					'background': 'linear-gradient(rgb(44, 0, 37), rgb(81, 0, 69))'
+				} : {},
+				{ color: 'white' },
+				tmp[layer].componentStyles['prestige-button']
+			]"
+			v-html="prestigeButtonText(layer)" 
+			v-on:click="doReset(layer)">
+		</button>
+	`,
+});
+
+Vue.component('alien-cat', {
+	props: ['layer', 'data'],
+	template: `
+		<button v-if="(tmp[layer].type !== 'none')" 
+			v-bind:class="{ [layer]: true, reset: true, locked: !tmp[layer].canReset, can: tmp[layer].canReset}"
+			v-bind:style="[
+				tmp[layer].canReset ? {
+					'background': '<img src="resources/aliencat.jpg" width="40" height="40">'
+				} : {},
+				{ color: 'white' },
+				tmp[layer].componentStyles['prestige-button']
+			]"
+			v-html="<img src="resources/aliencat.jpg" width="40" height="40">" 
+			v-on:click="doReset(layer)">
+		</button>
+	`,
+});
+
     // Displays the main resource for the layer
     Vue.component('main-display', {
         props: ['layer', 'data'],
@@ -346,6 +382,34 @@ Vue.component('dog-prestige-button', {
 			<br><br>
 			<span v-if="tmp[layer].showBest">Your best {{tmp[layer].resource}} is {{formatWhole(player[layer].best)}}<br></span>
 			<span v-if="tmp[layer].showTotal">You have made a total of {{formatWhole(player[layer].total)}} {{tmp[layer].resource}}<br></span>
+		</div>
+		`
+    })
+
+    // Displays the base resource for the layer, as well as the best and total values for the layer's currency, if tracked
+    Vue.component('alien-display', {
+        props: ['layer'],
+        template: `
+		<div style="margin-top: -13px">
+			<span v-if="tmp[layer].baseAmount"><br>You have {{formatWhole(tmp[layer].baseAmount)}} {{tmp[layer].resource}}</span>
+			<span v-if="tmp[layer].passiveGeneration"><br>You are gaining {{format(tmp[layer].resetGain.times(tmp[layer].passiveGeneration))}} {{tmp[layer].resource}} per second</span>
+			<br><br>
+			<span v-if="tmp[layer].showBest">Your best {{tmp[layer].resource}} is {{formatWhole(player[layer].best)}}<br></span>
+			<span v-if="tmp[layer].showTotal">You have made a total of {{formatWhole(player[layer].total)}} {{tmp[layer].resource}}<br></span>
+		</div>
+		`
+    })
+
+     // Displays the base resource for the layer, as well as the best and total values for the layer's currency, if tracked
+    Vue.component('essence-display', {
+        props: ['layer'],
+        template: `
+		<div style="margin-top: -13px">
+			<span v-if="tmp[layer].baseAmountEssence"><br>You have {{formatWhole(tmp[layer].baseAmountEssence)}} {{tmp[layer].baseResource}}</span>
+			<span v-if="tmp[layer].passiveGeneration"><br>You are gaining {{format(tmp[layer].resetGain.times(tmp[layer].passiveGeneration))}} {{tmp[layer].resource}} per second</span>
+			<br><br>
+			<span v-if="tmp[layer].showBest">Your best {{tmp[layer].baseResource}} is {{formatWhole(player[layer].best)}}<br></span>
+			<span v-if="tmp[layer].showTotal">You have made a total of {{formatWhole(player[layer].total)}} {{tmp[layer].baseResource}}<br></span>
 		</div>
 		`
     })
@@ -431,23 +495,49 @@ Vue.component('dog-prestige-button', {
     Vue.component('clickable', {
         props: ['layer', 'data'],
         template: `
-		<button 
-			v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked" 
-			v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
-			v-bind:style="[tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}, tmp[layer].clickables[data].style]"
-			v-on:click="if(!interval) clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
-			<span v-if= "tmp[layer].clickables[data].title"><h2 v-html="tmp[layer].clickables[data].title"></h2><br></span>
-			<span v-bind:style="{'white-space': 'pre-line'}" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
-			<node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
-			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
-
-		</button>
-		`,
-        data() { return { interval: false, time: 0, } },
+    <button 
+        v-if="tmp[layer].clickables && tmp[layer].clickables[data]!== undefined && tmp[layer].clickables[data].unlocked" 
+        v-bind:class="{ upg: true, tooltipBox: true, can: tmp[layer].clickables[data].canClick, locked: !tmp[layer].clickables[data].canClick}"
+        v-bind:style="[{
+            background: 'transparent',
+            border: 'none',
+            padding: '0',
+            boxShadow: 'none',
+            outline: 'none',
+        }, tmp[layer].clickables[data].style]"
+        v-on:click="if(!interval) clickClickable(layer, data)" 
+        :id='"clickable-" + layer + "-" + data' 
+        @mousedown="start" 
+        @mouseleave="stop" 
+        @mouseup="stop" 
+        @touchstart="start" 
+        @touchend="stop" 
+        @touchcancel="stop">
+        
+        <img 
+            src="resources/aliencat.jpg" 
+            width="80" 
+            height="80" 
+            style="display:block; pointer-events:none;" 
+            :style="tmp[layer].clickables[data].canClick ? { filter: 'drop-shadow(0 0 10px ' + tmp[layer].color + ')' } : {}">
+        
+        <span v-if="tmp[layer].clickables[data].title">
+            <h2 v-html="tmp[layer].clickables[data].title"></h2><br>
+        </span>
+        <span v-bind:style="{'white-space': 'pre-line'}" 
+              v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])">
+        </span>
+        <node-mark :layer='layer' :data='tmp[layer].clickables[data].marked'></node-mark>
+        <tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+    </button>
+    `,
+        data() {
+            return { interval: false, time: 0 }
+        },
         methods: {
             start() {
                 if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
-                    this.interval = setInterval((function() {
+                    this.interval = setInterval((function () {
                         let c = layers[this.layer].clickables[this.data]
                         if (this.time >= 5 && run(c.canClick, c)) {
                             run(c.onHold, c)
@@ -456,6 +546,7 @@ Vue.component('dog-prestige-button', {
                     }).bind(this), 50)
                 }
             },
+
             stop() {
                 clearInterval(this.interval)
                 this.interval = false

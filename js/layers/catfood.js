@@ -18,10 +18,27 @@ addLayer("catfood", {
     type: "catfood", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 1, // Prestige currency exponent
     base: new Decimal(1), // Only needed for static layers, base of the formula (b^(x^exp))
+    
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 
         return mult
+    },
+
+    autoPrestige() {
+        if (hasMilestone('space', 5)) {
+            return true
+        }
+        
+        return false
+    },
+
+    autoUpgrade() {
+        if (hasMilestone('space', 5)) {
+            return true
+        }
+        
+        return false
     },
 
     gainExp() { // Calculate the exponent on main currency from bonuses

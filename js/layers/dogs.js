@@ -97,7 +97,7 @@ addLayer("dogs", {
     milestones: {
         0: {
             requirementDescription: "a dog? (1)",
-            effectDescription: "x3.5 monies gain and 2x cat food gain",
+            effectDescription: "x3.5 monies gain<br>2x cat food gain",
             done() {
                 return player.dogs.points.gte(1)
             }
@@ -105,7 +105,7 @@ addLayer("dogs", {
 
         1: {
             requirementDescription: "multiple dogs? (2)",
-            effectDescription: "Lower cat cost by 1.5x and multiply flower gain by 2x",
+            effectDescription: "Lower cat cost by 1.5x<br>multiply flower gain by 2x",
             done() {
                 return player.dogs.points.gte(2)
             },
@@ -135,7 +135,7 @@ addLayer("dogs", {
                 return player.dogs.points.gte(8)
             },
 
-            effectDescription() {return "Dogs boost monies gain and unlock passive flower gain" + "<br> boost: " + format(milestoneEffect('dogs', 3)) + "x"},
+            effectDescription() {return "Dogs boost monies gain<br>unlock passive flower gain" + "<br> boost: " + format(milestoneEffect('dogs', 3)) + "x"},
             unlocked() { return hasMilestone("dogs", 2) },
         },
 
@@ -180,7 +180,7 @@ addLayer("dogs", {
         stuff: {
             title: "Dogs?",
             body() {
-                let desc = "You've unlocked dogs! Getting a dog will reset ALL your previous layers in return for a dog."
+                let desc = "You've unlocked dogs!<br>Getting a dog will reset ALL your previous layers in return for a dog."
                 return desc
             },
         },

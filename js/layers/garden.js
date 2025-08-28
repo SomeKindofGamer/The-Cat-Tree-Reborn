@@ -137,6 +137,10 @@ addLayer("garden", {
             gains = gains.mul(1.5)
         }
 
+        if (hasUpgrade("space", 14)) {
+            gains = gains.mul(upgradeEffect('space', 14))
+        }
+
         return gains
     },
 
@@ -178,7 +182,7 @@ addLayer("garden", {
 
         4: {
             requirementDescription: "Beautiful flowers! (1,000)",
-            effectDescription: "10x monies and Unlock more Cat Food Upgrades",
+            effectDescription: "10x monies<br>Unlock more Cat Food Upgrades",
             done() {
                 return (player.garden.points.gte(1000) && hasUpgrade("garden", 13))
             },
@@ -254,7 +258,7 @@ addLayer("garden", {
         stuff: {
             title: "The Garden!",
             body() { 
-                let desc = "Welcome to The Garden! You can plant your cats here to unlock milestones which unlock more content! This layer is not connected to Cat Food so it won't reset cat food only cats. You'll keep all your Cat Milestones but you'll lose all your cat upgrades. You can only reset once you've reached 20 cats and 10 cat food."
+                let desc = "Welcome to The Garden!<br>You can plant your cats here to unlock milestones which unlock more content!<br>This layer is not connected to Cat Food so it won't reset cat food only cats.<br>You'll keep all your Cat Milestones but you'll lose all your cat upgrades.<br>You can only reset once you've reached 20 cats and 10 cat food."
                 return desc
             },
         },
@@ -262,7 +266,7 @@ addLayer("garden", {
         softcap: {
             title: "Garden Softcap!",
             body() { 
-                let desc = "You've reached the softcap. This is here so you just dont get infinite flowers for infinite monies. In the future there will be upgrades where you can lower the softcap effect. Currently theres only one in Cat Food."
+                let desc = "You've reached the softcap.<br>This is here so you just dont get infinite flowers for infinite monies.<br>In the future there will be upgrades where you can lower the softcap effect.<br>Currently theres only one in Cat Food."
                 return desc
             },
             unlocked() {

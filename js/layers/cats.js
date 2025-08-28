@@ -18,6 +18,7 @@ addLayer("cats", {
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0.5, // Prestige currency exponent
     base: new Decimal(5), // Only needed for static layers, base of the formula (b^(x^exp))
+    
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -34,9 +35,21 @@ addLayer("cats", {
     autoPrestige() {
         if (hasUpgrade('catfood', 32)) {
             return true
-        } else {
-            return false
         }
+
+        if (hasMilestone('space', 4)) {
+            return true
+        }
+        
+        return false
+    },
+
+    autoUpgrade() {
+        if (hasMilestone('space', 5)) {
+            return true
+        }
+        
+        return false
     },
 
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -102,9 +115,14 @@ addLayer("cats", {
             Generation = Generation.times(multer)
         }
 
-
         if (hasMilestone("dogs", 1)) {
            Generation = Generation.times(1.5)
+        }
+
+        if (player.cats.points.gte(50)) {
+            let extra = player.cats.points.sub(50)
+            let multiplier = Decimal.pow(0.945, extra)
+            Generation = Generation.mul(multiplier)
         }
         
         return Generation
@@ -114,18 +132,24 @@ addLayer("cats", {
         if (resettingLayer === 'catfood') {
             let savedMilestones = player.cats.milestones;
             let upgradesToKeep = [];
+            let catsToKeep = new Decimal(0)
 
-            if (hasMilestone('cats', 4)) {
+            if (hasMilestone('cats', 4) || hasMilestone('space', 4)) {
                 upgradesToKeep = player.cats.upgrades.slice();
             } else {
                 if (hasUpgrade('cats', 21)) upgradesToKeep.push(21);
                 if (hasUpgrade('cats', 22)) upgradesToKeep.push(22);
             }
 
+            if (hasMilestone('space', 4)) {
+               catsToKeep = player.cats.points
+            }
+
             layerDataReset(this.layer);
 
             player.cats.upgrades = upgradesToKeep;
             player.cats.milestones = savedMilestones;
+            player.cats.points = catsToKeep
         }
 
         if (resettingLayer === 'garden') {
@@ -136,6 +160,10 @@ addLayer("cats", {
                 upgradesToKeep = player.cats.upgrades.slice();
             }
 
+            if (hasUpgrade('space', 13)) {
+                upgradesToKeep = player.cats.upgrades.slice();
+            }
+
             layerDataReset(this.layer);
 
             player.cats.upgrades = upgradesToKeep;
@@ -143,13 +171,23 @@ addLayer("cats", {
         }
         
         if (resettingLayer === 'dogs') {
-            let savedMilestones = [];
+            let savedMilestones = player.cats.milestones;
             let upgradesToKeep = [];
+            let catsToKeep = new Decimal(0)
 
             layerDataReset(this.layer);
 
+            if (hasUpgrade('space', 13)) {
+                upgradesToKeep = player.cats.upgrades.slice();
+            }
+
+            if (hasMilestone('space', 4)) {
+               catsToKeep = player.cats.points
+            }
+
             player.cats.upgrades = upgradesToKeep;
             player.cats.milestones = savedMilestones;
+            player.cats.points = catsToKeep
         }
     },
 
@@ -191,7 +229,7 @@ addLayer("cats", {
 
         4: {
             requirementDescription: "So many cats! (9)",
-            effectDescription: "Keep all cat upgrades on Cat Food reset and unlock more cat food upgrades",
+            effectDescription: "Keep all cat upgrades on Cat Food reset<br>unlock more cat food upgrades",
             done() {
                 return player.cats.points.gte(9)
             },
@@ -200,7 +238,7 @@ addLayer("cats", {
 
         5: {
             requirementDescription: "Ready to plant? (20)",
-            effectDescription: "x3 monies and unlock The Garden",
+            effectDescription: "x3 monies<br>unlock The Garden",
             done() {
                 return player.cats.points.gte(20)
             },
@@ -209,7 +247,7 @@ addLayer("cats", {
 
         6: {
             requirementDescription: "The next step. (45)",
-            effectDescription: "We've taken over earth. Now it's time for something else. (Coming soon!)",
+            effectDescription: "We've taken over earth.<br>Now it's time for something else.",
             done() {
                 return player.cats.points.gte(45)
             },

@@ -253,11 +253,15 @@ function spawnCat() {
 function doReset(layer, force = false) {
     if (tmp[layer].type == "none") return
     let row = tmp[layer].row
+    let am = tmp[layer].baseAmount
     if (!force) {
+        if (tmp[layer].resource == "aliens") {
+           am = tmp[layer].baseAmountEssence
+        }
 
         if (tmp[layer].canReset === false) return;
 
-        if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
+        if (am.lt(tmp[layer].requires)) return;
         let gain = tmp[layer].resetGain
 
         if (hasUpgrade("garden", 12) && tmp[layer].resource == "flowers") {
@@ -280,6 +284,10 @@ function doReset(layer, force = false) {
             gain = gain.mul(1.5)
         }
 
+        if (hasUpgrade("space", 14) && tmp[layer].resource == "flowers") {
+            gain = gain.mul(upgradeEffect('space', 14))
+        }
+
         if (tmp[layer].resource == "flowers") {
             gain = gain.mul(layers.dogs.effect().boostfood)
         }
@@ -289,21 +297,24 @@ function doReset(layer, force = false) {
         }
 
         if (tmp[layer].type == "static") {
-            if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
+            if (am.lt(tmp[layer].nextAt)) return;
             gain = (tmp[layer].canBuyMax ? gain : 1)
         }
 
         if (tmp[layer].type == "catfood") {
-            if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
-            let gains = new Decimal(2)
+            if (am.lt(tmp[layer].nextAt)) return;
+            let gains = new Decimal(1)
 
             if (hasUpgrade("catfood", 24)) {
                 gains = gains.mul(2)
             }
 
+            if (hasMilestone("dogs", 0)) {
+                gains = gains.mul(2)
+            }
+
             gain = (tmp[layer].canBuyMax ? gain : gains)
         }
-
 
         if (layers[layer].onPrestige)
             run(layers[layer].onPrestige, layers[layer], gain)
@@ -325,8 +336,7 @@ function doReset(layer, force = false) {
     }
 
     if (run(layers[layer].resetsNothing, layers[layer])) return
-    tmp[layer].baseAmount = decimalZero // quick fix
-
+    am = decimalZero // quick fix
 
     for (layerResetting in layers) {
         if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
