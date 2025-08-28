@@ -4,10 +4,15 @@ let modInfo = {
     author: "Shoober",
     pointsName: "monies",
     modFiles: [
+        
+        // Main Stat Layers
         "layers/cats.js",
         "layers/catfood.js",
         "layers/garden.js",
         "layers/dogs.js",
+        "layers/space.js",
+
+        // Other Layer Thingies
         "layers/a.js",
         "tree.js",
     ],
@@ -20,31 +25,38 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-    num: "1.2",
+    num: "1.3 | The Space Update",
     name: "Cat Tree Reborn",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-    <h3>v1.2</h3><br>
+    <h3>v1.3 | The Space Update</h3><br>
+		- 1 new layer!<br>
+        - 4 new upgrades!<br>
+        - 9 new milestones!<br>
+        - 4 new achievements!<br>
+        <br>
+
+    <h3>v1.2 | The Dog Update</h3><br>
 		- 1 new layer!<br>
         - 3 new upgrades!<br>
         - 7 new milestones!<br>
         - 4 new achievements!<br>
         <br>
 
-    <h3>v1.1</h3><br>
+    <h3>v1.1 | The Garden Update</h3><br>
 		- 1 new layer!<br>
         - 11 new upgrades!<br>
         - 6 new milestones!<br>
         - 4 new achievements!<br>
         <br>
         
-	<h3>v1.0.1</h3><br>
+	<h3>v1.0.1 | Release Hotfix </h3><br>
 		- Added SFX option<br>
         - Added Hotkeys<br>
         <br>
 
-	<h3>v1.0</h3><br>
+	<h3>v1.0.0 | Release</h3><br>
 		- cats! ofc!<br>
         - 2 Layers<br>
         - 9 Achievements<br>
@@ -52,7 +64,7 @@ let changelog = `<h1>Changelog:</h1><br>
         - 19 upgrades<br>
 		`
 
-let winText = `Congratulations! You've officially taken over the planet and beat the game till next update!, but for now...`
+let winText = `Congratulations! You've reached space milestone 8 and beat the game till next update!, but for now...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -71,6 +83,7 @@ function canGenPoints() {
 function getPointGen() {
     if (!canGenPoints())
         return new Decimal(0)
+
     let gain = new Decimal(1)
 
     // Cat Layer
@@ -101,6 +114,11 @@ function getPointGen() {
         
     gain = gain.times(layers.dogs.effect().boost)
 
+    // Space Layer
+    if (hasMilestone('space', 1)) gain = gain.times(milestoneEffect('space', 1))
+    if (hasMilestone('space', 6)) gain = gain.times(milestoneEffect('space', 6))
+    if (hasUpgrade("space", 14)) gain = gain.times(upgradeEffect('space', 14))
+
     return gain
 }
 
@@ -114,7 +132,7 @@ var displayThings = []
 
 // Determines when the game "ends"
 function isEndgame() {
-    return hasMilestone("cats", 6)
+    return hasMilestone("space", 8)
 }
 
 // Less important things beyond this point!

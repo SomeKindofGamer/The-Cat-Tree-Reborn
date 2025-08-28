@@ -53,6 +53,10 @@ function prestigeButtonText(layer) {
             gains = gains.mul(1.5)
         }
 
+        if (hasUpgrade("space", 14) && tmp[layer].resource == "flowers") {
+            gains = gains.mul(upgradeEffect('space', 14))
+        }
+
         if (hasUpgrade("garden", 21) && tmp[layer].resource == "dogs") {
             gains = gains.mul(2)
         }
@@ -65,8 +69,14 @@ function prestigeButtonText(layer) {
         else return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "spend all your monies for "}+<b>${formatWhole(gains)}</b> ${tmp[layer].resource} <br><br>${(tmp[layer].nextDescription !== undefined ? tmp[layer].nextDescription : "you can afford the next at ")} ${ (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt))} ${ tmp[layer].baseResource }`
     } else if (tmp[layer].type == "static") {
         if (tmp.nerdMode) return "Cost Formula: " + costFormulaStatic(layer);
-        else return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "spend all your monies for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"":"") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }		
-		`
+        else 
+            ret = `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "spend all your monies for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"":"") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }`
+            
+            if (tmp[layer].resource == "aliens") {
+                ret = `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "spend all your monies for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmountEssence.gte(tmp[layer].nextAt)&&(tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax?"":"") : ""} ${formatWhole(tmp[layer].baseAmountEssence)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${ tmp[layer].baseResource }`
+            }
+            
+            return ret
     } else if (tmp[layer].type == "catfood") {
         let gains = tmp[layer].resetGain
 

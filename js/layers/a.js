@@ -136,10 +136,34 @@ addLayer("a", {
 
         42: {
             name: "The next step.",
-           done() { return hasMilestone("cats", 6) },
+            done() { return hasMilestone("cats", 6) },
             tooltip: "Unlock cat milestone 6", // Showed when the achievement is completed
             onComplete() { player.a.points = player.a.points.add(1) },
             unlocked() { return hasAchievement("a", 41) },
+        },
+
+        43: {
+            name: `<img src="resources/aliencat.jpg" width="40" height="40">`,
+            done() { return hasMilestone("space", 0) },
+            tooltip: "zeeble zorp! get your first alien cat!", // Showed when the achievement is completed
+            onComplete() { player.a.points = player.a.points.add(1) },
+            unlocked() { return hasAchievement("a", 42) },
+        },
+
+        44: {
+            name: `collecting aliens cats like pokemon cards`,
+            done() { return player.space.points.gte(30) },
+            tooltip: "Get 30 Alien Cats!", // Showed when the achievement is completed
+            onComplete() { player.a.points = player.a.points.add(1) },
+            unlocked() { return hasAchievement("a", 43) },
+        },
+
+        45: {
+            name: `What's next?`,
+            done() { return hasMilestone("space", 8) },
+            tooltip: "Unlock space milestone 8", // Showed when the achievement is completed
+            onComplete() { player.a.points = player.a.points.add(1) },
+            unlocked() { return hasAchievement("a", 44) },
         },
     },
 
@@ -174,7 +198,10 @@ addLayer("a", {
 
         ["row", [
             ["achievement", 41],
-            ["achievement", 42]
+            ["achievement", 42],
+            ["achievement", 43],
+            ["achievement", 44],
+            ["achievement", 45],
         ]],
 
         "blank",
