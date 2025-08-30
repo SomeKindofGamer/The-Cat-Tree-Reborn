@@ -112,6 +112,10 @@ addLayer("space", {
                     essenceMulti = essenceMulti.mul(milestoneEffect('space', 2))
                 }
 
+                if (hasMilestone("space", 3)) {
+                    essenceMulti = essenceMulti.mul(milestoneEffect('space', 3))
+                }
+
                 if (hasMilestone("space", 6)) {
                     essenceMulti = essenceMulti.mul(milestoneEffect('space', 6))
                 }
@@ -140,6 +144,10 @@ addLayer("space", {
 
                 if (hasMilestone("space", 2)) {
                     essenceMulti = essenceMulti.mul(milestoneEffect('space', 2))
+                }
+
+                if (hasMilestone("space", 3)) {
+                    essenceMulti = essenceMulti.mul(milestoneEffect('space', 3))
                 }
 
                 if (hasMilestone("space", 6)) {
@@ -203,10 +211,10 @@ addLayer("space", {
 
             effect() {
                 let mult = player[this.layer].essence.add(1)
-                let powr = new Decimal(0.125)
+                let powr = new Decimal(0.1)
 
                 if (hasMilestone("space", 4)) {
-                    powr = new Decimal(0.15)
+                    powr = new Decimal(0.125)
                 }
 
                 return mult.pow(powr)
@@ -224,7 +232,7 @@ addLayer("space", {
 
             effect() {
                 let mult = player.catfood.points.add(1)
-                let powr = new Decimal(0.85)
+                let powr = new Decimal(0.2)
 
                 return mult.pow(powr)
             },
