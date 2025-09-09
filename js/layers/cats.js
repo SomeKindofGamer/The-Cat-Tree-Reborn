@@ -179,10 +179,7 @@ addLayer("cats", {
 
             if (hasUpgrade('space', 13)) {
                 upgradesToKeep = player.cats.upgrades.slice();
-            }
-
-            if (hasMilestone('space', 4)) {
-               catsToKeep = player.cats.points
+                catsToKeep = player.cats.points
             }
 
             player.cats.upgrades = upgradesToKeep;
