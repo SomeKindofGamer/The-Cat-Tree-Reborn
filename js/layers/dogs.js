@@ -90,6 +90,10 @@ addLayer("dogs", {
                 visible = true
             }
 
+            if (player.space.essence.gte(1)) {
+                visible = true
+            }
+
             return visible
         },
     },],
