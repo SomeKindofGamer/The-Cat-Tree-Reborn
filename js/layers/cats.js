@@ -380,7 +380,13 @@ addLayer("cats", {
                         catpower = catpower.add(0.006)
                     }
 
-                    return player.points.add(1).pow(catpower)
+                    let catPowerAdded = player.points.add(1).pow(catpower)
+
+                    if (catPowerAdded.gte(4)) {
+                        return 4
+                    }
+
+                    return catPowerAdded
                 } else {
                     return 1
                 }
